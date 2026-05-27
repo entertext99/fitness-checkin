@@ -121,12 +121,10 @@ Page({
     records.forEach(r => {
       if (r.date) monthSet.add(r.date)
       monthMinutes += (r.durationMinutes || 0)
-      const types = r.selectedTypes
-      const typeList = Array.isArray(types) ? types : (typeof types === 'string' ? [types] : [])
-      if (typeList.length === 1) {
-        if (typeList[0] === '有氧') aerobicMinutes += (r.durationMinutes || 0)
-        else if (typeList[0] === '无氧') anaerobicMinutes += (r.durationMinutes || 0)
-      }
+      const rawTypes = Array.isArray(r.selectedTypes) ? r.selectedTypes : (r.trainTypes ? [r.trainTypes] : [])
+      const typeList = rawTypes.length === 1 && typeof rawTypes[0] === 'string' ? rawTypes[0].split('、') : rawTypes
+      if (typeList.includes('有氧')) aerobicMinutes += (r.durationMinutes || 0)
+      if (typeList.includes('无氧')) anaerobicMinutes += (r.durationMinutes || 0)
     })
 
     const monthDuration = Math.round(monthMinutes / 60 * 10) / 10
@@ -192,12 +190,19 @@ Page({
     const measureVals = _measureMap[date] || null
     const dietStatus = _dietMap[date] || ''
 
-    const workoutList = workoutRecords.map(r => {
-      const startDate = new Date(r.startTime)
-      const timeStr = `${util.pad(startDate.getHours())}:${util.pad(startDate.getMinutes())}`
-      const types = Array.isArray(r.selectedTypes) ? r.selectedTypes : (r.trainTypes ? [r.trainTypes] : [])
-      return { id: r._id, timeStr, durationText: r.durationText || '', trainTypes: types }
+    let totalMinutes = 0
+    let aerobicMinutes = 0
+    let anaerobicMinutes = 0
+    workoutRecords.forEach(r => {
+      const dur = r.durationMinutes || 0
+      totalMinutes += dur
+      const rawTypes = Array.isArray(r.selectedTypes) ? r.selectedTypes : (r.trainTypes ? [r.trainTypes] : [])
+      const typeList = rawTypes.length === 1 && typeof rawTypes[0] === 'string' ? rawTypes[0].split('、') : rawTypes
+      if (typeList.includes('有氧')) aerobicMinutes += dur
+      if (typeList.includes('无氧')) anaerobicMinutes += dur
     })
+    const hasWorkout = workoutRecords.length > 0
+    const totalDurationText = totalMinutes > 0 ? (totalMinutes >= 60 ? `${Math.floor(totalMinutes / 60)}时${totalMinutes % 60}分` : `${totalMinutes}分`) : ''
 
     const measureList = []
     if (measureVals) {
@@ -214,8 +219,10 @@ Page({
     this.setData({
       selectedDate: date,
       dayDetail: {
-        hasWorkout: workoutList.length > 0,
-        workoutList,
+        hasWorkout,
+        aerobicMinutes,
+        anaerobicMinutes,
+        totalDurationText,
         weight: weight || '',
         hasMeasure: measureList.length > 0,
         measureList,

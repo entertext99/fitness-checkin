@@ -43,6 +43,7 @@
 .detail-value.diet-warn { color: #F5222D; }
 
 .detail-measure-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.breakdown-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; background: #F9F9F9; border-radius: 8px; margin-bottom: 6px; }
 .detail-measure-item { font-size: 13px; color: #333333; background: #F9F9F9; padding: 4px 12px; border-radius: 8px; }
 
 .stats-summary { margin-top: 10px; }
