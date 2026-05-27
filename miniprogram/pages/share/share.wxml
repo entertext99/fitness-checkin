@@ -1,0 +1,38 @@
+<view class="share-page">
+  <view wx:if="{{!hasRoom}}" class="card">
+    <text class="section-title">🏠 创建房间</text>
+    <text class="room-desc">创建自己的健身房间，将房间号分享给好友</text>
+    <button class="btn-action btn-action-green" bindtap="createRoom">创建健身房间</button>
+  </view>
+
+  <view wx:if="{{!hasRoom}}" class="card">
+    <text class="section-title">🔍 寻找搭子</text>
+    <text class="room-desc">输入好友的房间号，加入对方的健身房间</text>
+    <view class="room-join-row">
+      <input class="room-input" placeholder="输入6位房间号" value="{{inputRoomId}}" bindinput="onInputRoomId" maxlength="6" />
+      <button class="btn-action btn-action-pink room-join-btn" bindtap="joinRoom">加入</button>
+    </view>
+  </view>
+
+  <view wx:if="{{hasRoom}}" class="card">
+    <text class="section-title">🏠 我的房间</text>
+    <view class="room-info">
+      <text class="room-id-label">房间号</text>
+      <text class="room-id-value">{{myRoomId}}</text>
+      <text class="room-status">{{partner ? '👥 已有搭子' : '⏳ 等待搭子加入...'}}</text>
+      <text wx:if="!partner" class="room-share-tip">将房间号分享给好友即可成为搭子</text>
+      <button class="btn-leave-room" bindtap="leaveRoom">退出房间</button>
+    </view>
+  </view>
+
+  <view wx:if="{{partner}}" class="card">
+    <text class="section-title">👥 我的搭子</text>
+    <view class="partner-item">
+      <view class="partner-avatar"><text>💪</text></view>
+      <view class="partner-info">
+        <text class="partner-name">{{partner.nickname}}</text>
+        <text class="partner-status">已绑定</text>
+      </view>
+    </view>
+  </view>
+</view>

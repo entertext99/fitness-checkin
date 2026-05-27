@@ -1,0 +1,21 @@
+<view class="splash-container">
+  <view class="splash-content">
+    <view class="splash-icon">
+      <text class="icon-text">💪🌸</text>
+    </view>
+    <view class="splash-title">今天又美丽了一点！</view>
+    <view class="splash-subtitle">坚持打卡，遇见更好的自己</view>
+    <view class="splash-decoration">
+      <text class="deco-item">✨</text>
+      <text class="deco-item">🌟</text>
+      <text class="deco-item">💕</text>
+    </view>
+  </view>
+  <view class="splash-footer">
+    <view class="loading-dots">
+      <text class="dot">.</text>
+      <text class="dot">.</text>
+      <text class="dot">.</text>
+    </view>
+  </view>
+</view>

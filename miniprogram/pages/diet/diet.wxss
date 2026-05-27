@@ -1,0 +1,223 @@
+.diet-page {
+  padding-bottom: 20px;
+}
+
+.diet-card {
+  text-align: center;
+}
+
+.diet-month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.diet-nav-btn {
+  font-size: 28px;
+  color: #FF94B4;
+  padding: 4px 16px;
+  font-weight: 300;
+}
+
+.diet-month-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #333333;
+}
+
+.diet-weekday-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 8px;
+}
+
+.diet-weekday {
+  font-size: 12px;
+  color: #999999;
+  text-align: center;
+  padding: 4px 0;
+}
+
+.diet-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.diet-day-empty {
+  aspect-ratio: 1;
+  visibility: hidden;
+}
+
+.diet-day-cell {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.diet-day-num {
+  font-size: 13px;
+  color: #333333;
+}
+
+.diet-today-num {
+  color: #FF94B4;
+  font-weight: 700;
+}
+
+.diet-day-num-recorded {
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.diet-today {
+  border: 1.5px solid #FF94B4;
+}
+
+.diet-healthy {
+  background: #52C41A;
+}
+
+.diet-junk {
+  background: #F5222D;
+}
+
+.diet-select-card {
+  margin-top: 10px;
+}
+
+.diet-select-row {
+  display: flex;
+  gap: 12px;
+}
+
+.diet-btn {
+  flex: 1;
+  padding: 12px 10px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  text-align: center;
+}
+
+.diet-btn-healthy {
+  background: #52C41A;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(82,196,26,0.3);
+}
+
+.diet-btn-healthy:active {
+  opacity: 0.85;
+}
+
+.diet-btn-junk {
+  background: #F5222D;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(245,34,45,0.3);
+}
+
+.diet-btn-junk:active {
+  opacity: 0.85;
+}
+
+.diet-today-tip {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 13px;
+  color: #666666;
+}
+
+.diet-legend-card {
+  margin-top: 10px;
+}
+
+.diet-legend-row {
+  display: flex;
+  justify-content: center;
+  gap: 32px;
+}
+
+.diet-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.diet-legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.diet-legend-green {
+  background: #52C41A;
+}
+
+.diet-legend-red {
+  background: #F5222D;
+}
+
+.diet-legend-text {
+  font-size: 12px;
+  color: #999999;
+}
+
+.diet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.diet-result-panel {
+  background: #FFFFFF;
+  border-radius: 16px;
+  padding: 32px 32px 24px;
+  width: 280px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.panel-keep {
+  border-top: 4px solid #52C41A;
+}
+
+.panel-warn {
+  border-top: 4px solid #F5222D;
+}
+
+.diet-result-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.diet-result-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.diet-result-btn {
+  width: 120px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #FFFFFF;
+  background: #FF94B4;
+  border: none;
+}

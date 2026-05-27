@@ -1,0 +1,105 @@
+.index-container { padding-bottom: 20px; }
+
+.header-banner {
+  background: linear-gradient(135deg, #FFB5C2, #FF94B4);
+  padding: 24px 16px 32px;
+  border-radius: 0 0 24px 24px;
+}
+
+.header-greeting { margin-bottom: 16px; }
+
+.greeting-text { font-size: 20px; font-weight: 600; color: #FFFFFF; }
+
+.header-stats {
+  display: flex; align-items: center; justify-content: space-around;
+  background: rgba(255,255,255,0.2); border-radius: 12px; padding: 14px 12px;
+}
+
+.stat-item { display: flex; flex-direction: column; align-items: center; flex: 1; }
+.stat-num { font-size: 22px; font-weight: 700; color: #FFFFFF; }
+.stat-label { font-size: 11px; color: rgba(255,255,255,0.8); margin-top: 4px; }
+.stat-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.3); }
+
+.workout-card { margin-top: -16px; position: relative; z-index: 10; }
+
+.card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+
+.workout-status { display: flex; align-items: center; font-size: 12px; color: #999999; }
+.workout-status.active { color: #52C41A; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; background: #999999; margin-right: 6px; }
+.workout-status.active .status-dot { background: #52C41A; animation: pulse 1.5s ease-in-out infinite; }
+
+.timer-display { display: flex; flex-direction: column; align-items: center; padding: 12px 0; }
+.timer-text { font-size: 42px; font-weight: 700; color: #FF94B4; font-variant-numeric: tabular-nums; letter-spacing: 2px; }
+.timer-text.paused { color: #999999; }
+.timer-display.idle .timer-text { color: #DDDDDD; }
+.timer-label { font-size: 12px; color: #999999; margin-top: 6px; }
+
+.today-records { margin-top: 12px; border-top: 1px solid #EEEEEE; padding-top: 12px; }
+.record-label { font-size: 12px; color: #999999; margin-bottom: 8px; }
+.record-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #F5F5F5; }
+.record-info { display: flex; align-items: center; gap: 10px; }
+.record-type { font-size: 12px; color: #FF94B4; background: #FFF0F5; padding: 3px 10px; border-radius: 12px; }
+.record-duration { font-size: 12px; color: #666666; }
+.record-time { font-size: 11px; color: #999999; }
+
+.workout-types { margin: 12px 0; }
+.type-label { font-size: 13px; color: #666666; margin-bottom: 10px; display: block; }
+.type-options { display: flex; gap: 12px; }
+.type-tag { flex: 1; padding: 12px 10px; text-align: center; border-radius: 12px; font-size: 14px; font-weight: 500; transition: all 0.2s; }
+.type-unselected { background: #F5F5F5; color: #999999; }
+.type-selected-pink { background: #FF94B4; color: #FFFFFF; box-shadow: 0 2px 8px rgba(255,148,180,0.3); }
+
+.workout-actions { margin-top: 12px; }
+.action-row { display: flex; gap: 12px; }
+.action-btn-half { flex: 1; min-width: 0; }
+
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 0 16px;
+  margin-top: 10px;
+}
+
+.entry-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  cursor: pointer;
+  padding: 14px 6px;
+}
+
+.entry-card:active {
+  opacity: 0.7;
+}
+
+.entry-icon {
+  font-size: 22px;
+  margin-bottom: 6px;
+}
+
+.entry-text {
+  font-size: 12px;
+  color: #666666;
+  font-weight: 500;
+}
+
+.summary-section { margin-top: 10px; }
+.summary-card { cursor: pointer; }
+.summary-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.more-btn { font-size: 12px; color: #FF94B4; }
+.summary-grid { display: flex; gap: 12px; }
+.summary-item { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px; background: #FFF8FA; border-radius: 12px; }
+.summary-num { font-size: 20px; font-weight: 700; color: #FF94B4; }
+.summary-label { font-size: 11px; color: #999999; margin-top: 4px; text-align: center; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

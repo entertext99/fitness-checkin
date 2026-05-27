@@ -1,0 +1,52 @@
+{
+  "pages": [
+    "pages/splash/splash",
+    "pages/wizard/wizard",
+    "pages/index/index",
+    "pages/calendar/calendar",
+    "pages/weight/weight",
+    "pages/measurement/measurement",
+    "pages/diet/diet",
+    "pages/share/share",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#FFFFFF",
+    "navigationBarTitleText": "健身打卡",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#F9F9F9"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#FF94B4",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "iconPath": "images/tab_home.png",
+        "selectedIconPath": "images/tab_home_active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/calendar/calendar",
+        "iconPath": "images/tab_calendar.png",
+        "selectedIconPath": "images/tab_calendar_active.png",
+        "text": "打卡"
+      },
+      {
+        "pagePath": "pages/share/share",
+        "iconPath": "images/tab_partner.png",
+        "selectedIconPath": "images/tab_partner_active.png",
+        "text": "搭子"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "iconPath": "images/tab_profile.png",
+        "selectedIconPath": "images/tab_profile_active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "lazyCodeLoading": "requiredComponents"
+}

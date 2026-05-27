@@ -1,0 +1,70 @@
+<view class="index-container">
+  <view class="header-banner">
+    <view class="header-greeting"><text class="greeting-text">🌸 今天也要加油哦！</text></view>
+    <view class="header-stats">
+      <view class="stat-item"><text class="stat-num">{{stats.continuousDays}}</text><text class="stat-label">连续打卡</text></view>
+      <view class="stat-divider"></view>
+      <view class="stat-item"><text class="stat-num">{{stats.totalDays}}</text><text class="stat-label">总打卡</text></view>
+      <view class="stat-divider"></view>
+      <view class="stat-item"><text class="stat-num">{{stats.weekMinutes}}</text><text class="stat-label">本周分钟</text></view>
+    </view>
+  </view>
+
+  <view class="workout-card card">
+    <view class="card-header">
+      <text class="section-title">🏋️ 今日训练</text>
+      <view class="workout-status {{isWorking ? 'active' : ''}}"><text class="status-dot"></text><text>{{statusText}}</text></view>
+    </view>
+    <view wx:if="!isWorking && !isPaused" class="timer-display idle"><text class="timer-text">00:00:00</text><text class="timer-label">点击下方开始记录今天的训练</text></view>
+    <view wx:if="isWorking || isPaused" class="timer-display running"><text class="timer-text {{isPaused ? 'paused' : ''}}">{{timerDisplay}}</text><text class="timer-label">{{isPaused ? '⏸ 已暂停' : '🔥 正在努力燃烧卡路里'}}</text></view>
+    <view wx:if="todayRecords.length > 0" class="today-records">
+      <view class="record-label">今日已完成训练</view>
+      <view class="record-item" wx:for="{{todayRecords}}" wx:key="index">
+        <view class="record-info"><text class="record-type">{{item.trainTypes}}</text><text class="record-duration">{{item.durationText}}</text></view>
+        <text class="record-time">{{item.timeStr}}</text>
+      </view>
+    </view>
+    <view class="workout-types" wx:if="!isWorking && !isPaused">
+      <text class="type-label">训练类型</text>
+      <view class="type-options">
+        <view class="type-tag {{aerobicClass}}" data-type="有氧" bindtap="toggleType">🏃 有氧训练</view>
+        <view class="type-tag {{anaerobicClass}}" data-type="无氧" bindtap="toggleType">💪 无氧训练</view>
+      </view>
+    </view>
+    <view class="workout-actions">
+      <button wx:if="{{!isWorking && !isPaused}}" class="btn-action btn-action-green" bindtap="startWorkout">▶️ 开始健身</button>
+      <view wx:if="{{isWorking && !isPaused}}" class="action-row">
+        <button class="btn-action btn-action-pink action-btn-half" bindtap="pauseWorkout">⏸ 暂停</button>
+        <button class="btn-action btn-action-red action-btn-half" bindtap="stopTimer">⏹ 结束</button>
+      </view>
+      <view wx:if="{{isPaused}}" class="action-row">
+        <button class="btn-action btn-action-green action-btn-half" bindtap="resumeWorkout">▶️ 继续</button>
+        <button class="btn-action btn-action-red action-btn-half" bindtap="stopTimer">⏹ 结束</button>
+      </view>
+    </view>
+  </view>
+
+  <view class="entry-grid">
+    <view class="entry-card" bindtap="navigateTo" data-url="/pages/weight/weight">
+      <text class="entry-icon">⚖️</text>
+      <text class="entry-text">体重</text>
+    </view>
+    <view class="entry-card" bindtap="navigateTo" data-url="/pages/measurement/measurement">
+      <text class="entry-icon">📏</text>
+      <text class="entry-text">围度</text>
+    </view>
+    <view class="entry-card" bindtap="navigateTo" data-url="/pages/diet/diet">
+      <text class="entry-icon">🥗</text>
+      <text class="entry-text">饮食</text>
+    </view>
+  </view>
+
+  <view class="card summary-card" bindtap="goCalendar">
+    <view class="summary-header"><text class="section-title">📊 本月概览</text><text class="more-btn">打卡详情 ›</text></view>
+    <view class="summary-grid">
+      <view class="summary-item"><text class="summary-num">{{monthStats.totalSessions}}</text><text class="summary-label">打卡次数</text></view>
+      <view class="summary-item"><text class="summary-num">{{monthStats.totalHours}}</text><text class="summary-label">总时长(时)</text></view>
+      <view class="summary-item"><text class="summary-num">{{monthStats.avgMinutes}}</text><text class="summary-label">平均(分)</text></view>
+    </view>
+  </view>
+</view>

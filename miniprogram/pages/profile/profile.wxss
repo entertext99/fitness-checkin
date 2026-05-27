@@ -1,0 +1,175 @@
+.profile-page { padding-bottom: 20px; }
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px 16px;
+}
+
+.avatar-circle {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #FFB5C2, #FF94B4);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.avatar-text { font-size: 32px; }
+
+.profile-name { font-size: 18px; font-weight: 700; color: #333333; }
+
+.card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.card-title-row .section-title {
+  margin-bottom: 0;
+}
+
+.btn-edit,
+.btn-save,
+.btn-cancel {
+  border-radius: 16px;
+  padding: 0 16px;
+  font-size: 12px;
+  height: 28px;
+  line-height: 28px;
+  text-align: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  min-width: 60px;
+}
+
+.btn-edit::after,
+.btn-save::after,
+.btn-cancel::after {
+  border: none;
+}
+
+.btn-edit {
+  background: transparent;
+  border: 1px solid #FF94B4;
+  color: #FF94B4;
+}
+
+.btn-edit:active {
+  background: #FFF0F5;
+}
+
+.btn-save {
+  background: #FF94B4;
+  color: #FFFFFF;
+  border: 1px solid #FF94B4;
+}
+
+.btn-save:active {
+  opacity: 0.8;
+}
+
+.btn-cancel {
+  background: #FFFFFF;
+  color: #999999;
+  border: 1px solid #DDDDDD;
+}
+
+.btn-cancel:active {
+  background: #F5F5F5;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.info-display { }
+
+.info-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.info-row:last-child { border-bottom: none; }
+
+.info-lbl {
+  font-size: 13px;
+  color: #999999;
+  min-width: 80px;
+}
+
+.info-val {
+  flex: 1;
+  font-size: 14px;
+  color: #333333;
+  font-weight: 500;
+}
+
+.info-val-pink {
+  color: #FF94B4;
+  font-weight: 600;
+}
+
+.auto-tag {
+  font-size: 10px;
+  color: #FFFFFF;
+  background: #FF94B4;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+
+.info-edit { }
+
+.profile-field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F5F5F5;
+}
+
+.profile-field:last-child { border-bottom: none; }
+
+.profile-lbl { font-size: 13px; color: #666666; min-width: 90px; }
+.profile-inp { flex: 1; text-align: right; font-size: 14px; color: #333333; height: 32px; }
+.profile-val { font-size: 14px; color: #333333; }
+.profile-val-auto { font-size: 14px; color: #FF94B4; font-weight: 600; }
+
+.bmi-section {
+  margin-top: 12px;
+  padding: 12px;
+  background: #FFF8FA;
+  border-radius: 12px;
+}
+
+.bmi-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.bmi-row:last-child { margin-bottom: 0; }
+
+.bmi-label { font-size: 13px; color: #666666; min-width: 80px; }
+.bmi-value { font-size: 18px; font-weight: 700; color: #FF94B4; }
+.bmi-type { font-size: 16px; font-weight: 600; padding: 2px 12px; border-radius: 12px; }
+
+.type-thin { background: #FFF0F5; color: #FF94B4; }
+.type-normal { background: #F0FFF5; color: #52C41A; }
+.type-over { background: #FFF8F0; color: #FFB84D; }
+.type-fat { background: #FFF0F0; color: #F5222D; }
+
+.stats-row { display: flex; gap: 12px; margin-top: 8px; }
+.stats-box { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px; background: #FFF8FA; border-radius: 12px; }
+.stats-num { font-size: 20px; font-weight: 700; color: #FF94B4; }
+.stats-label { font-size: 11px; color: #999999; margin-top: 4px; }

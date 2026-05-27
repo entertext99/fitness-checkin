@@ -1,0 +1,29 @@
+<view class="weight-page">
+  <view class="card">
+    <text class="section-title">今日体重</text>
+    <view class="weight-input-row">
+      <input class="weight-input" type="digit" placeholder="输入体重" value="{{weightInput}}" bindinput="onWeightInput" />
+      <text class="weight-unit">kg</text>
+      <button class="btn-primary weight-save" bindtap="saveWeight">保存</button>
+    </view>
+    <text wx:if="{{todayRecorded}}" class="update-tip">今日已记录，再次保存将更新今日体重</text>
+  </view>
+
+  <view class="card">
+    <text class="section-title">体重变化趋势</text>
+    <canvas class="chart-canvas" canvas-id="weightChart"></canvas>
+    <view wx:if="{{records.length < 2}}" class="empty-hint">至少需要2条记录才能生成趋势图</view>
+  </view>
+
+  <view wx:if="{{todayRecorded}}" class="card today-display-card">
+    <text class="section-title">今日记录</text>
+    <text class="today-value">{{todayWeight}} kg</text>
+    <text class="today-date">{{todayDate}}</text>
+  </view>
+
+  <view class="card history-nav-card" bindtap="goCalendar">
+    <text class="history-nav-icon">📋</text>
+    <text class="history-nav-text">查看历史记录</text>
+    <text class="history-nav-arrow">›</text>
+  </view>
+</view>

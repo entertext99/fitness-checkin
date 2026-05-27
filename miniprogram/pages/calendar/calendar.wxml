@@ -1,0 +1,59 @@
+<view class="calendar-container">
+  <view class="calendar-header card">
+    <view class="month-nav">
+      <text class="nav-btn" bindtap="prevMonth">‹</text>
+      <text class="month-title">{{year}}年{{month}}月</text>
+      <text class="nav-btn" bindtap="nextMonth">›</text>
+    </view>
+    <view class="weekday-row">
+      <text class="weekday" wx:for="{{weekdays}}" wx:key="index">{{item}}</text>
+    </view>
+    <view class="days-grid">
+      <view class="day-cell empty" wx:for="{{emptyCells}}" wx:key="index"></view>
+      <view class="day-cell {{item.isToday ? 'today' : ''}}" wx:for="{{days}}" wx:key="index" data-date="{{item.date}}" bindtap="onDayTap">
+        <text class="day-num">{{item.day}}</text>
+        <view wx:if="{{item.weight}}" class="day-weight">{{item.weight}}</view>
+        <view wx:if="{{item.hasWorkout}}" class="day-workout-icon">🏋️</view>
+      </view>
+    </view>
+  </view>
+
+  <view class="day-detail card" wx:if="{{selectedDate}}">
+    <view class="detail-header">{{selectedDate}} 记录</view>
+    <view wx:if="{{!dayDetail.hasWorkout && !dayDetail.weight && !dayDetail.hasMeasure && !dayDetail.dietLabel}}" class="empty-state"><text>该日无记录</text></view>
+    <view wx:if="{{dayDetail.hasWorkout}}" class="detail-section">
+      <text class="detail-section-title">🏋️ 健身打卡</text>
+      <view class="detail-record" wx:for="{{dayDetail.workoutList}}" wx:key="id">
+        <view class="record-top"><text class="record-time">{{item.timeStr}}</text><text class="record-duration">{{item.durationText}}</text></view>
+        <view class="record-bottom"><text class="tag tag-pink" wx:for="{{item.trainTypes}}" wx:key="index">{{item}}</text></view>
+      </view>
+    </view>
+    <view wx:if="{{dayDetail.weight}}" class="detail-section">
+      <text class="detail-section-title">⚖️ 体重</text>
+      <text class="detail-value">{{dayDetail.weight}} kg</text>
+    </view>
+    <view wx:if="{{dayDetail.hasMeasure}}" class="detail-section">
+      <text class="detail-section-title">📏 围度</text>
+      <view class="detail-measure-row">
+        <text class="detail-measure-item" wx:for="{{dayDetail.measureList}}" wx:key="name">{{item.label}} {{item.value}}</text>
+      </view>
+    </view>
+    <view wx:if="{{dayDetail.dietLabel}}" class="detail-section">
+      <text class="detail-section-title">🥗 饮食</text>
+      <text class="detail-value {{dayDetail.dietClass}}">{{dayDetail.dietLabel}}</text>
+    </view>
+  </view>
+
+  <view class="stats-summary card">
+    <text class="section-title">📈 本月统计</text>
+    <view class="stats-grid">
+      <view class="stats-box"><text class="stats-num">{{stat.monthDays}}</text><text class="stats-label">打卡天数</text></view>
+      <view class="stats-box"><text class="stats-num">{{stat.monthDuration}}</text><text class="stats-label">总时长(时)</text></view>
+      <view class="stats-box"><text class="stats-num">{{stat.continuousDays}}</text><text class="stats-label">连续打卡</text></view>
+    </view>
+    <view class="stats-breakdown">
+      <view class="breakdown-item"><text class="breakdown-lbl">有氧</text><text class="breakdown-val">{{Math.round(stat.aerobicMinutes / 60 * 10) / 10 || 0}}h</text></view>
+      <view class="breakdown-item"><text class="breakdown-lbl">无氧</text><text class="breakdown-val">{{Math.round(stat.anaerobicMinutes / 60 * 10) / 10 || 0}}h</text></view>
+    </view>
+  </view>
+</view>

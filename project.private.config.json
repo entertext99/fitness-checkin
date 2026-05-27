@@ -1,0 +1,8 @@
+{
+  "description": "健身打卡与体态记录小程序 - 私人配置",
+  "projectname": "健身打卡与体态记录",
+  "setting": {
+    "compileHotReLoad": true
+  },
+  "libVersion": "3.7.12"
+}

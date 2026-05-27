@@ -1,0 +1,52 @@
+<view class="wizard-page">
+  <view class="wizard-header">
+    <text class="wizard-title">欢迎使用健身打卡</text>
+    <text class="wizard-subtitle">请先填写基本信息，开启你的健身之旅</text>
+  </view>
+
+  <view class="wizard-progress">
+    <view class="progress-dot {{step >= 1 ? 'active' : ''}}"><text class="dot-text">1</text></view>
+    <view class="progress-line {{step >= 2 ? 'active' : ''}}"></view>
+    <view class="progress-dot {{step >= 2 ? 'active' : ''}}"><text class="dot-text">2</text></view>
+    <view class="progress-line {{step >= 3 ? 'active' : ''}}"></view>
+    <view class="progress-dot {{step >= 3 ? 'active' : ''}}"><text class="dot-text">3</text></view>
+  </view>
+
+  <view class="wizard-body card">
+    <view wx:if="{{step === 1}}" class="step-content">
+      <text class="step-title">你叫什么名字？</text>
+      <input class="wizard-input" placeholder="输入昵称" value="{{nickname}}" bindinput="onNicknameInput" maxlength="20" />
+      <text class="step-title" style="margin-top: 28px;">你的性别是？</text>
+      <view class="gender-options">
+        <view class="gender-btn {{gender === '男' ? 'gender-selected' : ''}}" bindtap="setGender" data-gender="男">👨 男</view>
+        <view class="gender-btn {{gender === '女' ? 'gender-selected' : ''}}" bindtap="setGender" data-gender="女">👩 女</view>
+      </view>
+    </view>
+
+    <view wx:if="{{step === 2}}" class="step-content">
+      <text class="step-title">你的生日是？</text>
+      <picker mode="date" value="{{birthday}}" bindchange="onBirthdayChange" class="wizard-picker">
+        <view class="wizard-picker-view">{{birthday || '点击选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view wx:if="{{step === 3}}" class="step-content">
+      <text class="step-title">你的身高是多少？</text>
+      <view class="wizard-input-row">
+        <input class="wizard-input" type="digit" placeholder="输入身高" value="{{height}}" bindinput="onHeightInput" />
+        <text class="wizard-unit">cm</text>
+      </view>
+      <text class="step-title" style="margin-top: 28px;">你的初始体重？</text>
+      <view class="wizard-input-row">
+        <input class="wizard-input" type="digit" placeholder="输入初始体重" value="{{initWeight}}" bindinput="onInitWeightInput" />
+        <text class="wizard-unit">kg</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="wizard-footer">
+    <button wx:if="{{step > 1}}" class="btn-prev" bindtap="prevStep">上一步</button>
+    <button wx:if="{{step < 3}}" class="btn-action btn-action-green btn-next" bindtap="nextStep">下一步</button>
+    <button wx:if="{{step === 3}}" class="btn-action btn-action-green btn-next" bindtap="finish">🎉 完成</button>
+  </view>
+</view>
