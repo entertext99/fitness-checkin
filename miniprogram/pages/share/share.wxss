@@ -83,6 +83,7 @@
   display: flex;
   gap: 12px;
   margin-top: 12px;
+  width: 100%;
 }
 .room-actions button {
   flex: 1;
