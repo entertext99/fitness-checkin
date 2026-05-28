@@ -2,10 +2,9 @@ const cloudUtil = require('../../utils/cloud')
 
 Page({
   data: {
-    myRoomId: '',
-    partner: null,
-    inputRoomId: '',
-    hasRoom: false
+    ownedRoom: null,
+    joinedRooms: [],
+    inputRoomId: ''
   },
 
   onLoad() { this.init() },
@@ -13,21 +12,18 @@ Page({
 
   async init() {
     await cloudUtil.getOpenid()
-    await this.loadMyRoom()
+    await this.loadMyRooms()
   },
 
-  async loadMyRoom() {
+  async loadMyRooms() {
     try {
-      const res = await cloudUtil.callFunction('roomOperation', { action: 'findMyRoom' })
-      if (res.result.code !== 0 || !res.result.data) {
-        this.setData({ myRoomId: '', hasRoom: false, partner: null })
-        return
-      }
-      const room = res.result.data
+      const res = await cloudUtil.callFunction('roomOperation', { action: 'findMyRooms' })
+      if (res.result.code !== 0) return
+      const owned = res.result.data.filter(r => r.role === 'owner')
+      const joined = res.result.data.filter(r => r.role === 'member')
       this.setData({
-        myRoomId: room.roomId,
-        hasRoom: true,
-        partner: room.partnerOpenid ? { openid: room.partnerOpenid, nickname: '我的搭子' } : null
+        ownedRoom: owned.length > 0 ? owned[0] : null,
+        joinedRooms: joined
       })
     } catch (err) { console.error(err) }
   },
@@ -40,8 +36,8 @@ Page({
     try {
       const res = await cloudUtil.callFunction('roomOperation', { action: 'createRoom' })
       if (res.result.code !== 0) { wx.showToast({ title: res.result.msg, icon: 'none' }); return }
-      this.setData({ myRoomId: res.result.data.roomId, hasRoom: true })
       wx.showToast({ title: `房间创建成功：${res.result.data.roomId}`, icon: 'success' })
+      this.init()
     } catch (err) { console.error(err); wx.showToast({ title: '创建失败', icon: 'none' }) }
   },
 
@@ -53,20 +49,20 @@ Page({
     try {
       const res = await cloudUtil.callFunction('roomOperation', { action: 'joinRoom', roomId })
       if (res.result.code !== 0) { wx.showToast({ title: res.result.msg, icon: 'none' }); return }
-      this.setData({ myRoomId: res.result.data.roomId, hasRoom: true, partner: { openid: res.result.data.partnerOpenid, nickname: '搭子' } })
-      wx.showToast({ title: '添加健身搭子成功！', icon: 'success' })
+      wx.showToast({ title: '加入成功！', icon: 'success' })
+      this.setData({ inputRoomId: '' })
       this.init()
     } catch (err) { console.error(err); wx.showToast({ title: '加入失败', icon: 'none' }) }
   },
 
-  async leaveRoom() {
-    const openid = getApp().globalData.openid
-    if (!openid) return
+  async leaveRoom(e) {
+    const roomId = e.currentTarget.dataset.roomid
+    if (!roomId) return
     try {
-      const res = await cloudUtil.callFunction('roomOperation', { action: 'leaveRoom' })
+      const res = await cloudUtil.callFunction('roomOperation', { action: 'leaveRoom', roomId })
       if (res.result.code !== 0) { wx.showToast({ title: res.result.msg, icon: 'none' }); return }
-      this.setData({ myRoomId: '', hasRoom: false, partner: null })
-      wx.showToast({ title: '已退出房间', icon: 'success' })
-    } catch (err) { console.error(err); wx.showToast({ title: '退出失败', icon: 'none' }) }
+      wx.showToast({ title: res.result.msg, icon: 'success' })
+      this.init()
+    } catch (err) { console.error(err); wx.showToast({ title: '操作失败', icon: 'none' }) }
   }
 })

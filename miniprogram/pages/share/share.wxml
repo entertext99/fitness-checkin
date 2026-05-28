@@ -1,11 +1,11 @@
 <view class="share-page">
-  <view wx:if="{{!hasRoom}}" class="card">
+  <view wx:if="{{!ownedRoom}}" class="card">
     <text class="section-title">🏠 创建房间</text>
     <text class="room-desc">创建自己的健身房间，将房间号分享给好友</text>
     <button class="btn-action btn-action-green" bindtap="createRoom">创建健身房间</button>
   </view>
 
-  <view wx:if="{{!hasRoom}}" class="card">
+  <view class="card">
     <text class="section-title">🔍 寻找搭子</text>
     <text class="room-desc">输入好友的房间号，加入对方的健身房间</text>
     <view class="room-join-row">
@@ -14,25 +14,25 @@
     </view>
   </view>
 
-  <view wx:if="{{hasRoom}}" class="card">
+  <view wx:if="{{ownedRoom}}" class="card">
     <text class="section-title">🏠 我的房间</text>
     <view class="room-info">
       <text class="room-id-label">房间号</text>
-      <text class="room-id-value">{{myRoomId}}</text>
-      <text class="room-status">{{partner ? '👥 已有搭子' : '⏳ 等待搭子加入...'}}</text>
-      <text wx:if="!partner" class="room-share-tip">将房间号分享给好友即可成为搭子</text>
-      <button class="btn-leave-room" bindtap="leaveRoom">退出房间</button>
+      <text class="room-id-value">{{ownedRoom.roomId}}</text>
+      <text class="room-status">{{ownedRoom.partnerOpenid ? '👥 已有搭子' : '⏳ 等待搭子加入...'}}</text>
+      <text wx:if="{{!ownedRoom.partnerOpenid}}" class="room-share-tip">将房间号分享给好友即可成为搭子</text>
+      <button class="btn-leave-room" data-roomid="{{ownedRoom.roomId}}" bindtap="leaveRoom">删除房间</button>
     </view>
   </view>
 
-  <view wx:if="{{partner}}" class="card">
-    <text class="section-title">👥 我的搭子</text>
-    <view class="partner-item">
-      <view class="partner-avatar"><text>💪</text></view>
-      <view class="partner-info">
-        <text class="partner-name">{{partner.nickname}}</text>
-        <text class="partner-status">已绑定</text>
+  <view wx:if="{{joinedRooms.length > 0}}" class="card">
+    <text class="section-title">👥 已加入的房间（{{joinedRooms.length}}/5）</text>
+    <view class="joined-room-item" wx:for="{{joinedRooms}}" wx:key="roomId">
+      <view class="joined-room-info">
+        <text class="joined-room-id">{{item.roomId}}</text>
+        <text class="joined-room-partner">房主</text>
       </view>
+      <button class="btn-leave-room-sm" data-roomid="{{item.roomId}}" bindtap="leaveRoom">退出</button>
     </view>
   </view>
 </view>
