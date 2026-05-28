@@ -21,7 +21,10 @@
       <text class="room-id-value">{{ownedRoom.roomId}}</text>
       <text class="room-status">{{ownedRoom.partnerOpenid ? '👥 已有搭子' : '⏳ 等待搭子加入...'}}</text>
       <text wx:if="{{!ownedRoom.partnerOpenid}}" class="room-share-tip">将房间号分享给好友即可成为搭子</text>
-      <button class="btn-leave-room" data-roomid="{{ownedRoom.roomId}}" bindtap="leaveRoom">删除房间</button>
+      <view class="room-actions">
+        <button class="btn-action btn-action-pink" data-roomid="{{ownedRoom.roomId}}" bindtap="goRoomDetail">查看详情</button>
+        <button class="btn-leave-room" data-roomid="{{ownedRoom.roomId}}" bindtap="leaveRoom">删除房间</button>
+      </view>
     </view>
   </view>
 
@@ -32,7 +35,10 @@
         <text class="joined-room-id">{{item.roomId}}</text>
         <text class="joined-room-partner">房主</text>
       </view>
-      <button class="btn-leave-room-sm" data-roomid="{{item.roomId}}" bindtap="leaveRoom">退出</button>
+      <view class="joined-room-actions">
+        <button class="btn-view-sm" data-roomid="{{item.roomId}}" bindtap="goRoomDetail">详情</button>
+        <button class="btn-leave-room-sm" data-roomid="{{item.roomId}}" bindtap="leaveRoom">退出</button>
+      </view>
     </view>
   </view>
 </view>

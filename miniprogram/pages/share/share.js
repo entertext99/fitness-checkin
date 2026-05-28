@@ -55,6 +55,10 @@ Page({
     } catch (err) { console.error(err); wx.showToast({ title: '加入失败', icon: 'none' }) }
   },
 
+  goRoomDetail(e) {
+    wx.navigateTo({ url: `/pages/room-detail/room-detail?roomId=${e.currentTarget.dataset.roomid}` })
+  },
+
   async leaveRoom(e) {
     const roomId = e.currentTarget.dataset.roomid
     if (!roomId) return

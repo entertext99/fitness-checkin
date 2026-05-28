@@ -8,6 +8,7 @@
     "pages/measurement/measurement",
     "pages/diet/diet",
     "pages/share/share",
+    "pages/room-detail/room-detail",
     "pages/profile/profile"
   ],
   "window": {

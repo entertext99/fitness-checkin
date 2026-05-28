@@ -51,6 +51,39 @@ exports.main = async (event, context) => {
     return { code: 0, data: { roomId: room.roomId, partnerOpenid: room.member1_openid } }
   }
 
+  if (action === 'getRoomData') {
+    if (!roomId) return { code: 1, msg: '缺少房间号' }
+
+    const roomRes = await db.collection('partner_rooms').where({ roomId }).get()
+    if (roomRes.data.length === 0) return { code: 1, msg: '房间不存在' }
+    const room = roomRes.data[0]
+
+    const openids = [room.member1_openid]
+    if (room.member2_openid) openids.push(room.member2_openid)
+
+    const [profileRaw, weightRaw, measureRaw] = await Promise.all([
+      db.collection('user_profiles').where({ _openid: db.command.in(openids) }).get(),
+      db.collection('weight_records').where({ _openid: db.command.in(openids) }).orderBy('date', 'asc').get(),
+      db.collection('measurement_records').where({ _openid: db.command.in(openids) }).orderBy('date', 'asc').get()
+    ])
+
+    const members = openids.map(oid => {
+      const profile = profileRaw.data.find(p => p._openid === oid)
+      const weights = weightRaw.data.filter(w => w._openid === oid).map(w => ({ date: w.date, weight: w.weight }))
+      const measures = measureRaw.data.filter(m => m._openid === oid).map(m => ({ date: m.date, values: m.values }))
+      return {
+        openid: oid,
+        nickname: profile ? (profile.nickname || '健身达人') : '健身达人',
+        gender: profile ? (profile.gender || '') : '',
+        height: profile ? (profile.height || '') : '',
+        weights,
+        measures
+      }
+    })
+
+    return { code: 0, data: { roomId: room.roomId, members } }
+  }
+
   if (action === 'leaveRoom') {
     if (!roomId) return { code: 1, msg: '缺少房间号' }
 
