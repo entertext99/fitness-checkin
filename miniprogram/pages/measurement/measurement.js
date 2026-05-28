@@ -5,7 +5,9 @@ const { LineChart } = require('../../utils/chart')
 const MEASURE_FIELDS = [
   { name: 'waist', label: '腰围' },
   { name: 'hip', label: '臀围' },
+  { name: 'chest', label: '胸围' },
   { name: 'thigh', label: '大腿围' },
+  { name: 'calf', label: '小腿围' },
   { name: 'arm', label: '手臂围' }
 ]
 
