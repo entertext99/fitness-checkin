@@ -79,7 +79,32 @@
   background: #F5F5F5;
 }
 
-.room-actions { display: flex; gap: 10px; margin-top: 12px; }
+.room-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+.room-actions .btn-action {
+  height: 44px;
+  padding: 0 24px;
+  width: auto;
+  border-radius: 8px;
+  background: #F0F0F0;
+  color: #666666;
+  font-size: 13px;
+}
+.room-actions .btn-action:active { background: #E0E0E0; }
+.room-actions .btn-leave-room {
+  height: 44px;
+  padding: 0 24px;
+  width: auto;
+  border-radius: 8px;
+  margin-top: 0;
+  background: transparent;
+  border: 1px solid #E0E0E0;
+  color: #999999;
+  font-size: 13px;
+}
 .btn-view-sm {
   flex-shrink: 0;
   background: none;
