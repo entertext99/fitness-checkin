@@ -1,0 +1,9 @@
+{
+  "name": "roomOperation",
+  "version": "1.0.0",
+  "description": "房间操作（查询/加入）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

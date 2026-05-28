@@ -58,14 +58,9 @@ Page({
     if (roomId.length !== 6) { wx.showToast({ title: '请输入6位房间号', icon: 'none' }); return }
     if (this.data.hasRoom) { wx.showToast({ title: '你已有房间', icon: 'none' }); return }
     try {
-      const db = cloudUtil.db
-      const res = await db.collection('partner_rooms').where({ roomId }).get()
-      if (res.data.length === 0) { wx.showToast({ title: '房间不存在', icon: 'none' }); return }
-      const room = res.data[0]
-      if (room.member2_openid) { wx.showToast({ title: '房间人数已满', icon: 'none' }); return }
-      if (room.member1_openid === openid) { wx.showToast({ title: '不能加入自己的房间', icon: 'none' }); return }
-      await db.collection('partner_rooms').doc(room._id).update({ data: { member2_openid: openid } })
-      this.setData({ myRoomId: roomId, hasRoom: true, partner: { openid: room.member1_openid, nickname: '搭子' } })
+      const res = await cloudUtil.callFunction('roomOperation', { action: 'joinRoom', roomId })
+      if (res.result.code !== 0) { wx.showToast({ title: res.result.msg, icon: 'none' }); return }
+      this.setData({ myRoomId: res.result.data.roomId, hasRoom: true, partner: { openid: res.result.data.partnerOpenid, nickname: '搭子' } })
       wx.showToast({ title: '添加健身搭子成功！', icon: 'success' })
       this.init()
     } catch (err) { console.error(err); wx.showToast({ title: '加入失败', icon: 'none' }) }
