@@ -81,29 +81,30 @@
 
 .room-actions {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   margin-top: 12px;
 }
-.room-actions .btn-action {
+.room-actions button {
+  flex: 1;
   height: 44px;
-  padding: 0 24px;
-  width: auto;
+  line-height: 44px;
+  padding: 0;
   border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  text-align: center;
+}
+.room-actions .btn-action {
+  background: #FF94B4;
+  color: #FFFFFF;
+}
+.room-actions .btn-action:active { opacity: 0.8; }
+.room-actions .btn-leave-room {
   background: #F0F0F0;
   color: #666666;
-  font-size: 13px;
-}
-.room-actions .btn-action:active { background: #E0E0E0; }
-.room-actions .btn-leave-room {
-  height: 44px;
-  padding: 0 24px;
-  width: auto;
-  border-radius: 8px;
   margin-top: 0;
-  background: transparent;
-  border: 1px solid #E0E0E0;
-  color: #999999;
-  font-size: 13px;
+}
 }
 .btn-view-sm {
   flex-shrink: 0;
