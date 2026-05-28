@@ -48,14 +48,17 @@ Page({
     const { members } = this.data
     if (members.length < 2) return
 
-    const allHaveEnough = members.every(m => m.weights.length >= 2)
-    if (!allHaveEnough) return
-
-    const dataSets = members.map((m, i) => ({
-      data: m.weights.map(w => ({ value: w.weight, label: w.date.slice(5) })),
-      color: MEMBER_COLORS[i % MEMBER_COLORS.length],
-      label: m.nickname
-    }))
+    const dataSets = []
+    members.forEach((m, i) => {
+      if (m.weights.length >= 2) {
+        dataSets.push({
+          data: m.weights.map(w => ({ value: w.weight, label: w.date.slice(5) })),
+          color: MEMBER_COLORS[i % MEMBER_COLORS.length],
+          label: m.nickname
+        })
+      }
+    })
+    if (dataSets.length === 0) return
 
     new LineChart('weightChart', 320, 180).draw([], {
       multiLine: true,
@@ -70,21 +73,22 @@ Page({
 
     MEASURE_FIELDS.forEach(field => {
       const canvasId = `measure_${field.name}`
-      const dataSets = members.map((m, i) => ({
-        data: m.measures
+      const dataSets = []
+      members.forEach((m, i) => {
+        const pts = m.measures
           .filter(mm => mm.values && mm.values[field.name])
-          .map(mm => ({ value: mm.values[field.name], label: mm.date.slice(5) })),
-        color: MEMBER_COLORS[i % MEMBER_COLORS.length],
-        label: m.nickname
-      })).filter(ds => ds.data.length >= 2)
+          .map(mm => ({ value: mm.values[field.name], label: mm.date.slice(5) }))
+        if (pts.length >= 2) {
+          dataSets.push({ data: pts, color: MEMBER_COLORS[i % MEMBER_COLORS.length], label: m.nickname })
+        }
+      })
+      if (dataSets.length === 0) return
 
-      if (dataSets.length >= 2) {
-        new LineChart(canvasId, 320, 150).draw([], {
-          multiLine: true,
-          dataSets,
-          yLabel: 'cm'
-        })
-      }
+      new LineChart(canvasId, 320, 150).draw([], {
+        multiLine: true,
+        dataSets,
+        yLabel: 'cm'
+      })
     })
   }
 })
