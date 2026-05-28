@@ -93,7 +93,7 @@ Page({
     const { records } = this.data
     if (records.length < 2) return
     const sorted = [...records].reverse()
-    const colors = ['#FF94B4', '#52C41A', '#FFB84D', '#7EB8FF']
+    const colors = ['#FF94B4', '#52C41A', '#FFB84D', '#7EB8FF', '#722ED1', '#FAAD14']
     const dataSets = MEASURE_FIELDS.map((f, i) => ({
       data: sorted.filter(r => r.values && r.values[f.name]).map(r => ({ value: r.values[f.name], label: r.date.slice(5) })),
       color: colors[i],
