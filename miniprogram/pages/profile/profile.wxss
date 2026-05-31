@@ -172,8 +172,8 @@
 .bmi-bar-wrap { position: relative; margin-top: 14px; padding-top: 8px; }
 .bmi-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; }
 .bmi-indicator {
-  width: 2px; height: 16px; background: #FF94B4; border-radius: 1px;
-  margin-top: -13px; transform: translateX(-1px);
+  position: absolute; bottom: 22px; width: 2px; height: 16px; background: #FF94B4; border-radius: 1px;
+  transform: translateX(-50%);
 }
 .bmi-debug { font-size: 10px; color: #FF94B4; display: block; text-align: center; }
 .bmi-bar-seg { height: 100%; }
