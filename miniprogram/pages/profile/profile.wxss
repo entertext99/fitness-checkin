@@ -169,6 +169,22 @@
 .type-over { background: #FFF8F0; color: #FFB84D; }
 .type-fat { background: #FFF0F0; color: #F5222D; }
 
+.bmi-bar-wrap { position: relative; margin-top: 14px; padding-top: 8px; }
+.bmi-bar-marker {
+  position: absolute; top: 0; font-size: 14px; color: #FF94B4; z-index: 2;
+  transform: translateX(-50%); line-height: 1;
+}
+.bmi-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; }
+.bmi-bar-seg { height: 100%; }
+.bmi-bar-thin { background: #FFB5C2; }
+.bmi-bar-normal { background: #52C41A; }
+.bmi-bar-over { background: #FFB84D; }
+.bmi-bar-fat { background: #F5222D; }
+.bmi-bar-labels { position: relative; height: 18px; margin-top: 2px; }
+.bmi-bar-lbl { position: absolute; font-size: 10px; color: #999999; transform: translateX(-50%); }
+.bmi-bar-ranges { position: relative; height: 16px; }
+.bmi-bar-range { position: absolute; font-size: 9px; color: #CCCCCC; transform: translateX(-50%); }
+
 .stats-row { display: flex; gap: 12px; margin-top: 8px; }
 .stats-box { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 12px; background: #FFF8FA; border-radius: 12px; }
 .stats-num { font-size: 20px; font-weight: 700; color: #FF94B4; }
