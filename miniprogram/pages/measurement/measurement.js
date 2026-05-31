@@ -15,14 +15,20 @@ Page({
     data: {
     items: MEASURE_FIELDS.map(f => ({ ...f, value: '' })),
     records: [],
-    todayRecorded: false,
     editingId: '',
-    todayMeasure: [],
-    todayDate: '',
+    currentValues: [],
+    currentDate: '',
+    displayDate: '',
     measureFields: MEASURE_FIELDS
   },
 
-  onLoad() { this.initAndLoad() },
+  onLoad(options) {
+    const date = options.date || util.getDateStr(new Date())
+    const d = date.split('-')
+    this.setData({ currentDate: date, displayDate: `${d[0]}年${parseInt(d[1])}月${parseInt(d[2])}日` })
+    this.initAndLoad()
+  },
+
   onShow() { this.initAndLoad() },
 
   async initAndLoad() {
@@ -44,25 +50,23 @@ Page({
       const db = cloudUtil.db
       const res = await db.collection('measurement_records').where({ _openid: openid }).orderBy('date', 'desc').get()
       const records = res.data
-      const today = util.getDateStr(new Date())
-      const todayRecord = records.find(r => r.date === today)
+      const { currentDate } = this.data
+      const currentRecord = records.find(r => r.date === currentDate)
       const items = this.data.items.map(item => ({
         ...item,
-        value: todayRecord && todayRecord.values && todayRecord.values[item.name] ? String(todayRecord.values[item.name]) : ''
+        value: currentRecord && currentRecord.values && currentRecord.values[item.name] ? String(currentRecord.values[item.name]) : ''
       }))
-      const todayMeasure = []
-      if (todayRecord && todayRecord.values) {
+      const currentValues = []
+      if (currentRecord && currentRecord.values) {
         MEASURE_FIELDS.forEach(f => {
-          if (todayRecord.values[f.name]) todayMeasure.push({ label: f.label, value: todayRecord.values[f.name] + 'cm' })
+          if (currentRecord.values[f.name]) currentValues.push({ label: f.label, value: currentRecord.values[f.name] + 'cm' })
         })
       }
       this.setData({
         records,
-        todayRecorded: !!todayRecord,
-        editingId: todayRecord ? todayRecord._id : '',
+        editingId: currentRecord ? currentRecord._id : '',
         items,
-        todayMeasure,
-        todayDate: todayRecord ? today : ''
+        currentValues
       })
       this.drawChart()
     } catch (err) { console.error(err) }
@@ -77,11 +81,12 @@ Page({
     })
     if (!hasValue) { wx.showToast({ title: '请至少填写一项', icon: 'none' }); return }
     try {
-      const today = util.getDateStr(new Date())
-      if (this.data.editingId) {
-        await cloudUtil.updateRecord('measurement_records', this.data.editingId, { values })
+      const { currentDate, editingId } = this.data
+      if (editingId) {
+        await cloudUtil.updateRecord('measurement_records', editingId, { values })
       } else {
-        await cloudUtil.addRecord('measurement_records', { values, date: today })
+        const res = await cloudUtil.addRecord('measurement_records', { values, date: currentDate })
+        this.setData({ editingId: res._id })
       }
       wx.showToast({ title: '保存成功', icon: 'success' })
       this.setData({ items: this.data.items.map(i => ({ ...i, value: '' })) })

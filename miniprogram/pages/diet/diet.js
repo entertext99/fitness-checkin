@@ -7,27 +7,36 @@ Page({
     weekdays: ['日', '一', '二', '三', '四', '五', '六'],
     emptyCells: [], days: [],
     dietRecordsMap: {},
+
+    // Current editing date
+    currentDate: '',
+    displayDate: '',
     todayStatus: '',
     editingId: '',
     showModal: false, modalType: '', modalIcon: '', modalText: '',
 
-    // Detailed food recording
+    // Food recording
     showDetail: false,
     items: [],
     totalCalories: 0,
     bmr: 0,
     age: 0,
     gender: '',
-    photoTempPath: '',
-    photoCloudId: '',
     foodName: '',
     foodCalories: '',
-    uploading: false
+    redPct: 0,
+    greenPct: 0
   },
 
-  onLoad() {
+  onLoad(options) {
     const now = new Date()
-    this.setData({ year: now.getFullYear(), month: now.getMonth() + 1 })
+    const date = options.date || util.getDateStr(now)
+    const d = date.split('-')
+    this.setData({
+      year: now.getFullYear(), month: now.getMonth() + 1,
+      currentDate: date,
+      displayDate: `${d[0]}年${parseInt(d[1])}月${parseInt(d[2])}日`
+    })
     this.initAndLoad()
   },
 
@@ -53,16 +62,14 @@ Page({
       const status = typeof record === 'string' ? record : (record.status || '')
       days.push({ day: i, date: dateStr, isToday: dateStr === today, status })
     }
-    const todayRecord = dietRecordsMap[today]
-    const todayStatus = typeof todayRecord === 'string' ? todayRecord : (todayRecord ? todayRecord.status : '')
-    this.setData({ emptyCells, days, todayStatus })
+    this.setData({ emptyCells, days })
   },
 
   async loadDietRecords() {
     try {
       const openid = getApp().globalData.openid
       if (!openid) return
-      const { year, month } = this.data
+      const { year, month, currentDate } = this.data
       const monthStart = `${year}-${util.pad(month)}-01`
       const monthEnd = `${year}-${util.pad(month)}-${util.getMonthDays(year, month)}`
       const db = cloudUtil.db
@@ -77,15 +84,15 @@ Page({
         idMap[r.date] = r._id
       })
 
-      const today = util.getDateStr(new Date())
-      const todayRec = map[today]
-      const todayStatus = todayRec ? (todayRec.status || '') : ''
-      const editingId = idMap[today] || ''
-      const items = todayRec && todayRec.items ? todayRec.items : []
-      const totalCalories = todayRec ? (todayRec.totalCalories || 0) : 0
-      const bmr = todayRec ? (todayRec.bmr || 0) : 0
+      const currentRec = map[currentDate]
+      const todayStatus = currentRec ? (currentRec.status || '') : ''
+      const editingId = idMap[currentDate] || ''
+      const items = currentRec && currentRec.items ? currentRec.items : []
+      const totalCalories = currentRec ? (currentRec.totalCalories || 0) : 0
+      const bmr = currentRec ? (currentRec.bmr || 0) : 0
 
       this.setData({ dietRecordsMap: map, todayStatus, editingId, items, totalCalories, bmr })
+      this.calcCalPct()
       this.buildCalendar()
     } catch (err) { console.error('加载饮食记录失败', err) }
   },
@@ -114,6 +121,7 @@ Page({
       if (age < 10 || age > 100) return
       const bmr = this.calcBMR(gender, weight, height, age)
       this.setData({ bmr, age, gender })
+      this.calcCalPct()
       if (this.data.items.length > 0) this.autoCalcStatus()
     } catch (err) { console.error(err) }
   },
@@ -135,6 +143,17 @@ Page({
     return Math.round(447.593 + 9.247 * weightKg + 3.098 * heightCm - 4.330 * age)
   },
 
+  calcCalPct() {
+    const { totalCalories, bmr } = this.data
+    if (!bmr) { this.setData({ redPct: 0, greenPct: 0 }); return }
+    if (totalCalories >= bmr) {
+      this.setData({ redPct: 100, greenPct: 0 })
+    } else {
+      const red = totalCalories / bmr * 100
+      this.setData({ redPct: red, greenPct: 100 - red })
+    }
+  },
+
   autoCalcStatus() {
     const { totalCalories, bmr } = this.data
     if (!bmr || !totalCalories) return
@@ -142,22 +161,22 @@ Page({
     this.setData({ todayStatus: status })
   },
 
-  // ---- Quick mark (existing) ----
+  // ---- Quick mark ----
   chooseHealthy() { this.saveQuickMark('healthy', '😊', '真棒！') },
   chooseJunk() { this.saveQuickMark('high_calorie', '😅', '明天要好好吃饭哦！') },
 
   async saveQuickMark(status, icon, text) {
     try {
-      const today = util.getDateStr(new Date())
-      const data = { date: today, status }
-      if (this.data.editingId) {
-        await cloudUtil.updateRecord('diet_records', this.data.editingId, { status })
+      const { currentDate, editingId } = this.data
+      const data = { date: currentDate, status }
+      if (editingId) {
+        await cloudUtil.updateRecord('diet_records', editingId, { status })
       } else {
         const res = await cloudUtil.addRecord('diet_records', data)
         this.setData({ editingId: res._id })
       }
       this.setData({
-        dietRecordsMap: { ...this.data.dietRecordsMap, [today]: { ...(this.data.dietRecordsMap[today] || {}), status } },
+        dietRecordsMap: { ...this.data.dietRecordsMap, [currentDate]: { ...(this.data.dietRecordsMap[currentDate] || {}), status } },
         todayStatus: status,
         showModal: true, modalIcon: icon, modalText: text,
         modalType: status === 'healthy' ? 'keep' : 'warn'
@@ -166,74 +185,38 @@ Page({
     } catch (err) { console.error(err); wx.showToast({ title: '保存失败', icon: 'none' }) }
   },
 
-  // ---- Photo & Food Recording ----
+  // ---- Food Recording ----
   toggleDetail() {
-    this.setData({ showDetail: !this.data.showDetail })
-  },
-
-  takePhoto() {
-    wx.chooseImage({ count: 1, sizeType: ['compressed'], sourceType: ['camera', 'album'],
-      success: (res) => {
-        this.setData({ photoTempPath: res.tempFilePaths[0], photoCloudId: '', foodName: '', foodCalories: '' })
-      }
-    })
-  },
-
-  async uploadPhoto() {
-    if (!this.data.photoTempPath || this.data.uploading) return
-    this.setData({ uploading: true })
-    try {
-      const openid = getApp().globalData.openid
-      const cloudPath = `diet/${openid}/${Date.now()}.jpg`
-      const res = await wx.cloud.uploadFile({ cloudPath, filePath: this.data.photoTempPath })
-      this.setData({ photoCloudId: res.fileID, uploading: false })
-      wx.showToast({ title: '上传成功', icon: 'success' })
-    } catch (err) {
-      console.error(err)
-      this.setData({ uploading: false })
-      wx.showToast({ title: '上传失败', icon: 'none' })
-    }
+    this.setData({ showDetail: !this.data.showDetail, foodName: '', foodCalories: '' })
   },
 
   onFoodNameInput(e) { this.setData({ foodName: e.detail.value }) },
   onFoodCaloriesInput(e) { this.setData({ foodCalories: e.detail.value }) },
 
   async addFoodItem() {
-    const { photoCloudId, photoTempPath, foodName, foodCalories } = this.data
-    if (!photoTempPath) { wx.showToast({ title: '请先拍照', icon: 'none' }); return }
+    const { foodName, foodCalories } = this.data
     if (!foodName) { wx.showToast({ title: '请输入食物名称', icon: 'none' }); return }
     const cal = parseFloat(foodCalories)
     if (!cal || cal <= 0) { wx.showToast({ title: '请输入有效热量', icon: 'none' }); return }
 
-    // Upload photo if not yet uploaded
-    let fileId = photoCloudId
-    if (!fileId) {
-      this.setData({ uploading: true })
-      try {
-        const openid = getApp().globalData.openid
-        const cloudPath = `diet/${openid}/${Date.now()}.jpg`
-        const res = await wx.cloud.uploadFile({ cloudPath, filePath: photoTempPath })
-        fileId = res.fileID
-      } catch (err) { console.error(err); wx.showToast({ title: '上传失败', icon: 'none' }); return }
-    }
-
-    const newItem = { foodName, calories: Math.round(cal), imageUrl: fileId, createTime: new Date() }
+    const newItem = { foodName, calories: Math.round(cal), createTime: new Date() }
     const items = [...this.data.items, newItem]
     const totalCalories = items.reduce((s, i) => s + i.calories, 0)
 
     try {
-      const today = util.getDateStr(new Date())
-      const data = { date: today, items, totalCalories, bmr: this.data.bmr, status: totalCalories > this.data.bmr ? 'high_calorie' : 'healthy' }
-      if (this.data.editingId) {
-        await cloudUtil.updateRecord('diet_records', this.data.editingId, data)
+      const { currentDate, editingId } = this.data
+      const data = { date: currentDate, items, totalCalories, bmr: this.data.bmr, status: totalCalories > this.data.bmr ? 'high_calorie' : 'healthy' }
+      if (editingId) {
+        await cloudUtil.updateRecord('diet_records', editingId, data)
       } else {
         const res = await cloudUtil.addRecord('diet_records', data)
         this.setData({ editingId: res._id })
       }
       this.setData({
-        items, totalCalories, photoTempPath: '', photoCloudId: '', foodName: '', foodCalories: '', uploading: false,
-        dietRecordsMap: { ...this.data.dietRecordsMap, [today]: { date: today, items, totalCalories, bmr: this.data.bmr, status: data.status } }
+        items, totalCalories, foodName: '', foodCalories: '',
+        dietRecordsMap: { ...this.data.dietRecordsMap, [currentDate]: { date: currentDate, items, totalCalories, bmr: this.data.bmr, status: data.status } }
       })
+      this.calcCalPct()
       this.autoCalcStatus()
       this.buildCalendar()
       wx.showToast({ title: '已添加', icon: 'success' })
@@ -250,15 +233,16 @@ Page({
 
   async saveItems(items, totalCalories) {
     try {
-      const today = util.getDateStr(new Date())
-      const data = { date: today, items, totalCalories, bmr: this.data.bmr, status: totalCalories > this.data.bmr ? 'high_calorie' : 'healthy' }
-      if (this.data.editingId) {
-        await cloudUtil.updateRecord('diet_records', this.data.editingId, data)
+      const { currentDate, editingId } = this.data
+      const data = { date: currentDate, items, totalCalories, bmr: this.data.bmr, status: totalCalories > this.data.bmr ? 'high_calorie' : 'healthy' }
+      if (editingId) {
+        await cloudUtil.updateRecord('diet_records', editingId, data)
       } else if (items.length > 0) {
         const res = await cloudUtil.addRecord('diet_records', data)
         this.setData({ editingId: res._id })
       }
       this.setData({ items, totalCalories })
+      this.calcCalPct()
       this.autoCalcStatus()
       this.buildCalendar()
     } catch (err) { console.error(err); wx.showToast({ title: '保存失败', icon: 'none' }) }

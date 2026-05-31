@@ -215,8 +215,11 @@ Page({
 
     let dietLabel = ''
     let dietClass = ''
-    if (dietStatus === 'healthy') { dietLabel = '🥗 健康饮食'; dietClass = 'diet-healthy' }
-    else if (dietStatus === 'high_calorie') { dietLabel = '⚠️ 高热量饮食'; dietClass = 'diet-warn' }
+    let dietIcon = ''
+    if (dietStatus === 'healthy') { dietLabel = '健康饮食'; dietClass = 'diet-ok'; dietIcon = '🥗' }
+    else if (dietStatus === 'high_calorie') { dietLabel = '高热量饮食'; dietClass = 'diet-warn'; dietIcon = '⚠️' }
+
+    const measureSummary = measureList.map(m => `${m.label}${m.value}`).join(' · ')
 
     this.setData({
       selectedDate: date,
@@ -228,9 +231,16 @@ Page({
         weight: weight || '',
         hasMeasure: measureList.length > 0,
         measureList,
+        measureSummary,
         dietLabel,
-        dietClass
+        dietClass,
+        dietIcon
       }
     })
+  },
+
+  navigateTo(e) {
+    const url = e.currentTarget.dataset.url
+    wx.navigateTo({ url })
   }
 })

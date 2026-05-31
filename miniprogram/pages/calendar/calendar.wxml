@@ -21,25 +21,37 @@
   <view class="day-detail card" wx:if="{{selectedDate}}">
     <view class="detail-header">{{selectedDate}} 记录</view>
     <view wx:if="{{!dayDetail.hasWorkout && !dayDetail.weight && !dayDetail.hasMeasure && !dayDetail.dietLabel}}" class="empty-state"><text>该日无记录</text></view>
-    <view wx:if="{{dayDetail.hasWorkout}}" class="detail-section">
-      <text class="detail-section-title">🏋️ 健身打卡</text>
-      <view class="breakdown-row"><text class="breakdown-lbl">有氧</text><text class="breakdown-val">{{dayDetail.aerobicMinutes}}分钟</text></view>
-      <view class="breakdown-row"><text class="breakdown-lbl">无氧</text><text class="breakdown-val">{{dayDetail.anaerobicMinutes}}分钟</text></view>
-      <view wx:if="{{dayDetail.totalDurationText}}" class="breakdown-row" style="border-top:1px solid #eee;margin-top:6px;padding-top:10px"><text class="breakdown-lbl">总时长</text><text class="breakdown-val" style="color:#FF94B4;font-weight:700">{{dayDetail.totalDurationText}}</text></view>
-    </view>
-    <view wx:if="{{dayDetail.weight}}" class="detail-section">
-      <text class="detail-section-title">⚖️ 体重</text>
-      <text class="detail-value">{{dayDetail.weight}} kg</text>
-    </view>
-    <view wx:if="{{dayDetail.hasMeasure}}" class="detail-section">
-      <text class="detail-section-title">📏 围度</text>
-      <view class="detail-measure-row">
-        <text class="detail-measure-item" wx:for="{{dayDetail.measureList}}" wx:key="name">{{item.label}} {{item.value}}</text>
+    <view wx:if="{{dayDetail.hasWorkout}}" class="detail-row" bindtap="navigateTo" data-url="/pages/training-detail/training-detail?date={{selectedDate}}">
+      <text class="detail-row-icon">🏋️</text>
+      <view class="detail-row-body">
+        <text class="detail-row-title">健身打卡</text>
+        <text class="detail-row-summary">有氧{{dayDetail.aerobicMinutes}}分 · 无氧{{dayDetail.anaerobicMinutes}}分</text>
       </view>
+      <text class="detail-row-arrow">›</text>
     </view>
-    <view wx:if="{{dayDetail.dietLabel}}" class="detail-section">
-      <text class="detail-section-title">🥗 饮食</text>
-      <text class="detail-value {{dayDetail.dietClass}}">{{dayDetail.dietLabel}}</text>
+    <view wx:if="{{dayDetail.weight}}" class="detail-row" bindtap="navigateTo" data-url="/pages/weight/weight?date={{selectedDate}}">
+      <text class="detail-row-icon">⚖️</text>
+      <view class="detail-row-body">
+        <text class="detail-row-title">体重</text>
+        <text class="detail-row-summary">{{dayDetail.weight}} kg</text>
+      </view>
+      <text class="detail-row-arrow">›</text>
+    </view>
+    <view wx:if="{{dayDetail.hasMeasure}}" class="detail-row" bindtap="navigateTo" data-url="/pages/measurement/measurement?date={{selectedDate}}">
+      <text class="detail-row-icon">📏</text>
+      <view class="detail-row-body">
+        <text class="detail-row-title">围度</text>
+        <text class="detail-row-summary">{{dayDetail.measureSummary}}</text>
+      </view>
+      <text class="detail-row-arrow">›</text>
+    </view>
+    <view wx:if="{{dayDetail.dietLabel}}" class="detail-row" bindtap="navigateTo" data-url="/pages/diet/diet?date={{selectedDate}}">
+      <text class="detail-row-icon" style="font-size:18px">{{dayDetail.dietIcon}}</text>
+      <view class="detail-row-body">
+        <text class="detail-row-title">饮食</text>
+        <text class="detail-row-summary {{dayDetail.dietClass}}">{{dayDetail.dietLabel}}</text>
+      </view>
+      <text class="detail-row-arrow">›</text>
     </view>
   </view>
 

@@ -205,6 +205,11 @@ view, text, image, button, input, scroll-view {
   font-weight: 300;
 }
 
+.current-date-label {
+  display: block; font-size: 13px; color: #999999;
+  margin-bottom: 10px; text-align: center;
+}
+
 .update-tip {
   font-size: 12px;
   color: #FF94B4;

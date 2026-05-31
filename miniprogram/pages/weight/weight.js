@@ -5,14 +5,20 @@ const { LineChart } = require('../../utils/chart')
 Page({
   data: {
     weightInput: '',
-    todayRecorded: false,
-    records: [],
     editingId: '',
-    todayWeight: '',
-    todayDate: ''
+    currentValue: '',
+    currentDate: '',
+    displayDate: '',
+    records: []
   },
 
-  onLoad() { this.initAndLoad() },
+  onLoad(options) {
+    const date = options.date || util.getDateStr(new Date())
+    const d = date.split('-')
+    this.setData({ currentDate: date, displayDate: `${d[0]}年${parseInt(d[1])}月${parseInt(d[2])}日` })
+    this.initAndLoad()
+  },
+
   onShow() { this.initAndLoad() },
 
   async initAndLoad() {
@@ -29,15 +35,13 @@ Page({
       const db = cloudUtil.db
       const res = await db.collection('weight_records').where({ _openid: openid }).orderBy('date', 'desc').get()
       const records = res.data
-      const today = util.getDateStr(new Date())
-      const todayRecord = records.find(r => r.date === today)
+      const { currentDate } = this.data
+      const currentRecord = records.find(r => r.date === currentDate)
       this.setData({
         records,
-        todayRecorded: !!todayRecord,
-        editingId: todayRecord ? todayRecord._id : '',
-        weightInput: todayRecord ? String(todayRecord.weight) : '',
-        todayWeight: todayRecord ? todayRecord.weight : '',
-        todayDate: todayRecord ? today : ''
+        editingId: currentRecord ? currentRecord._id : '',
+        weightInput: currentRecord ? String(currentRecord.weight) : '',
+        currentValue: currentRecord ? currentRecord.weight : ''
       })
       this.drawChart()
     } catch (err) { console.error(err) }
@@ -47,15 +51,16 @@ Page({
     const val = parseFloat(this.data.weightInput)
     if (!val || val <= 0) { wx.showToast({ title: '请输入有效体重', icon: 'none' }); return }
     try {
-      const today = util.getDateStr(new Date())
+      const { currentDate, editingId } = this.data
       const weight = Math.round(val * 10) / 10
-      if (this.data.editingId) {
-        await cloudUtil.updateRecord('weight_records', this.data.editingId, { weight })
+      if (editingId) {
+        await cloudUtil.updateRecord('weight_records', editingId, { weight })
       } else {
-        await cloudUtil.addRecord('weight_records', { weight, date: today })
+        const res = await cloudUtil.addRecord('weight_records', { weight, date: currentDate })
+        this.setData({ editingId: res._id })
       }
       wx.showToast({ title: '保存成功', icon: 'success' })
-      this.setData({ weightInput: '' })
+      this.setData({ weightInput: '', currentValue: weight })
       this.loadRecords()
     } catch (err) { console.error(err); wx.showToast({ title: '保存失败', icon: 'none' }) }
   },

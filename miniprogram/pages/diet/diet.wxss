@@ -226,64 +226,39 @@
 .detail-header { display: flex; align-items: center; justify-content: space-between; }
 .detail-toggle { font-size: 13px; color: #FF94B4; }
 
-.diet-photo-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 24px;
-  border: 2px dashed #E0E0E0;
-  border-radius: 12px;
-}
-.diet-photo-upload:active { background: #F9F9F9; }
-.diet-photo-icon { font-size: 40px; margin-bottom: 8px; }
-.diet-photo-text { font-size: 14px; color: #999999; }
-
-.diet-photo-preview { display: flex; gap: 12px; }
-.diet-photo-img { width: 100px; height: 100px; border-radius: 8px; flex-shrink: 0; }
-.diet-photo-inputs { flex: 1; display: flex; flex-direction: column; gap: 8px; }
-.diet-food-input {
-  height: 36px;
-  background: #F9F9F9;
-  border-radius: 8px;
-  padding: 0 12px;
-  font-size: 14px;
-  border: 1px solid #EEEEEE;
+.diet-text-input {
+  width: 100%; height: 40px; background: #F9F9F9; border-radius: 8px;
+  padding: 0 12px; font-size: 14px; border: 1px solid #EEEEEE; box-sizing: border-box;
 }
 .diet-cal-input-row {
-  display: flex;
-  align-items: center;
-  background: #F9F9F9;
-  border-radius: 8px;
-  border: 1px solid #EEEEEE;
-  padding-right: 12px;
+  display: flex; align-items: center; background: #F9F9F9; border-radius: 8px;
+  border: 1px solid #EEEEEE; padding-right: 12px; margin-top: 10px;
 }
-.diet-cal-input { flex: 1; height: 36px; padding: 0 12px; font-size: 14px; background: transparent; }
+.diet-cal-input { flex: 1; height: 40px; padding: 0 12px; font-size: 14px; background: transparent; }
 .diet-cal-unit { font-size: 12px; color: #999999; flex-shrink: 0; }
-.diet-photo-actions { display: flex; gap: 8px; margin-top: 4px; }
-.diet-photo-retake {
-  flex: 1; height: 36px; line-height: 36px; border-radius: 8px; font-size: 13px;
-  background: #F0F0F0; color: #666666; border: none; text-align: center;
+.diet-add-btn {
+  width: 100%; height: 40px; line-height: 40px; border-radius: 8px; font-size: 14px;
+  background: #FF94B4; color: #FFFFFF; border: none; text-align: center; margin-top: 10px;
 }
-.diet-photo-add {
-  flex: 2; height: 36px; line-height: 36px; border-radius: 8px; font-size: 13px;
-  background: #FF94B4; color: #FFFFFF; border: none; text-align: center;
-}
-.diet-photo-add:active, .diet-photo-retake:active { opacity: 0.8; }
+.diet-add-btn:active { opacity: 0.8; }
 
 .food-item {
-  display: flex; align-items: center; gap: 12px;
+  display: flex; align-items: center; gap: 10px;
   padding: 10px 0; border-bottom: 1px solid #F5F5F5;
 }
 .food-item:last-child { border-bottom: none; }
-.food-img { width: 48px; height: 48px; border-radius: 8px; flex-shrink: 0; }
+.food-num {
+  width: 22px; height: 22px; line-height: 22px; text-align: center; border-radius: 50%;
+  background: #F0F0F0; font-size: 12px; color: #999999; flex-shrink: 0;
+}
 .food-info { flex: 1; display: flex; flex-direction: column; gap: 2px; }
 .food-name { font-size: 14px; font-weight: 500; color: #333333; }
 .food-cal { font-size: 12px; color: #FF94B4; font-weight: 600; }
 .food-del { font-size: 16px; color: #CCCCCC; padding: 8px; flex-shrink: 0; }
 
 .cal-summary-bar { margin-top: 8px; }
-.cal-bar-bg { height: 12px; background: #F0F0F0; border-radius: 6px; overflow: hidden; }
-.cal-bar-fill { height: 100%; border-radius: 6px; }
+.cal-bar-bg { height: 12px; background: #F0F0F0; border-radius: 6px; overflow: hidden; display: flex; }
+.cal-bar-fill { height: 100%; }
 .cal-bar-ok { background: #52C41A; }
 .cal-bar-over { background: #F5222D; }
 .cal-bar-labels { display: flex; justify-content: space-between; margin-top: 6px; }

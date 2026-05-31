@@ -1,6 +1,7 @@
 <view class="measure-page">
   <view class="card">
-    <text class="section-title">今日围度</text>
+    <text class="section-title">📏 围度记录</text>
+    <text class="current-date-label">{{displayDate}}</text>
     <view class="measure-grid">
       <view class="measure-field" wx:for="{{items}}" wx:key="name">
         <text class="measure-lbl">{{item.label}}</text>
@@ -8,7 +9,8 @@
       </view>
     </view>
     <button class="btn-primary measure-save" bindtap="save">保存</button>
-    <text wx:if="{{todayRecorded}}" class="update-tip">今日已记录，再次保存将更新今日围度</text>
+    <text wx:if="{{editingId}}" class="update-tip">已记录，保存将更新该日数据</text>
+    <text wx:else class="update-tip">该日暂无记录，保存将新增</text>
   </view>
 
   <view class="card">
@@ -17,15 +19,15 @@
     <view wx:if="{{records.length < 2}}" class="empty-hint">至少需要2条记录才能生成趋势图</view>
   </view>
 
-  <view wx:if="{{todayRecorded}}" class="card today-display-card">
-    <text class="section-title">今日记录</text>
+  <view wx:if="{{currentValues.length > 0}}" class="card today-display-card">
+    <text class="section-title">{{displayDate}} 记录</text>
     <view class="today-measure-row">
-      <view class="today-measure-item" wx:for="{{todayMeasure}}" wx:key="name">
+      <view class="today-measure-item" wx:for="{{currentValues}}" wx:key="name">
         <text class="today-measure-lbl">{{item.label}}</text>
         <text class="today-measure-val">{{item.value}}</text>
       </view>
     </view>
-    <text class="today-date">{{todayDate}}</text>
+    <text class="today-date">{{currentDate}}</text>
   </view>
 
   <view class="card history-nav-card" bindtap="goCalendar">

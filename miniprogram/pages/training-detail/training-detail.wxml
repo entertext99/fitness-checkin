@@ -1,0 +1,34 @@
+<view class="td-page">
+  <view class="card">
+    <text class="section-title">🏋️ 训练记录</text>
+    <text class="td-date-label">{{displayDate}}</text>
+
+    <view class="td-add-form">
+      <picker class="td-picker" mode="selector" range="{{typeOptions}}" value="{{formTypeIdx}}" bindchange="onTypeChange">
+        <view class="td-picker-view">{{typeOptions[formTypeIdx]}}</view>
+      </picker>
+      <view class="td-duration-row">
+        <input class="td-duration-input" type="digit" placeholder="时长(分钟)" value="{{formDuration}}" bindinput="onDurationInput" />
+        <text class="td-duration-unit">分钟</text>
+      </view>
+      <button class="td-add-btn" bindtap="addRecord">＋ 添加</button>
+    </view>
+  </view>
+
+  <view class="card">
+    <text class="section-title">训练记录（{{records.length}}）</text>
+    <view wx:if="{{records.length === 0}}" class="empty-hint">该日无训练记录</view>
+    <view class="td-record" wx:for="{{records}}" wx:for-index="idx" wx:key="_id">
+      <view class="td-record-main" data-index="{{idx}}" bindtap="editDuration">
+        <view class="td-record-icon">{{item.trainTypes === '有氧' ? '🏃' : '🏋️'}}</view>
+        <view class="td-record-info">
+          <text class="td-record-type">{{item.trainTypes}}</text>
+          <text class="td-record-dur">{{item.durationMinutes}}分钟</text>
+          <text wx:if="{{item.startTime}}" class="td-record-time">{{item.startTime.slice(11,16)}} - {{item.endTime ? item.endTime.slice(11,16) : ''}}</text>
+        </view>
+        <text class="td-record-edit">修改</text>
+      </view>
+      <text class="td-record-del" data-index="{{idx}}" bindtap="deleteRecord">✕</text>
+    </view>
+  </view>
+</view>
