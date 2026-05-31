@@ -75,6 +75,7 @@
           <text class="bmi-bar-range" style="left:0%">18.5</text>
           <text class="bmi-bar-range" style="left:28.3%">25</text>
           <text class="bmi-bar-range" style="left:66.7%">30</text>
+          <text class="bmi-bar-range" style="right:0%;transform:translateX(50%)">40</text>
         </view>
       </view>
     </view>
