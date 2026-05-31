@@ -12,21 +12,84 @@
       <view class="diet-day-empty" wx:for="{{emptyCells}}" wx:key="index"></view>
       <view class="diet-day-cell {{item.isToday ? 'diet-today' : ''}} {{item.status === 'healthy' ? 'diet-healthy' : ''}} {{item.status === 'high_calorie' ? 'diet-junk' : ''}}"
             wx:for="{{days}}" wx:key="index"
-            data-date="{{item.date}}"
-            bindtap="onDayTap">
+            data-date="{{item.date}}" bindtap="onDayTap">
         <text class="diet-day-num {{item.status ? 'diet-day-num-recorded' : ''}} {{item.isToday && !item.status ? 'diet-today-num' : ''}}">{{item.day}}</text>
       </view>
     </view>
   </view>
 
+  <!-- Quick Mark -->
   <view class="diet-select-card card">
     <text class="section-title">今日饮食</text>
     <view class="diet-select-row">
       <button class="diet-btn diet-btn-healthy" bindtap="chooseHealthy">🥗 健康饮食</button>
       <button class="diet-btn diet-btn-junk" bindtap="chooseJunk">🍔 高热量饮食</button>
     </view>
-    <view wx:if="{{todayStatus}}" class="diet-today-tip">
-      <text>今日已记录：{{todayStatus === 'healthy' ? '健康饮食 🥗' : '高热量饮食 🍔'}}，再次点击可更新</text>
+    <view wx:if="{{todayStatus && items.length === 0}}" class="diet-today-tip">
+      <text>今日已标记：{{todayStatus === 'healthy' ? '健康饮食 🥗' : '高热量饮食 🍔'}}</text>
+    </view>
+    <view wx:if="{{items.length > 0}}" class="diet-today-tip">
+      <text>{{todayStatus === 'healthy' ? '🥗 健康饮食' : '⚠️ 高热量饮食'}} · {{items.length}}条食物 · 共{{totalCalories}}千卡</text>
+    </view>
+  </view>
+
+  <!-- Calorie Summary -->
+  <view wx:if="{{bmr > 0}}" class="card">
+    <text class="section-title">📊 热量汇总</text>
+    <view class="cal-summary-bar">
+      <view class="cal-bar-bg">
+        <view class="cal-bar-fill {{totalCalories > bmr ? 'cal-bar-over' : 'cal-bar-ok'}}" style="width:{{Math.min(totalCalories / bmr * 100, 100)}}%"></view>
+      </view>
+      <view class="cal-bar-labels">
+        <text class="cal-bar-total">{{totalCalories}}千卡</text>
+        <text class="cal-bar-bmr">基础代谢 {{bmr}}千卡</text>
+      </view>
+    </view>
+    <view wx:if="{{totalCalories > 0}}" class="cal-summary-text">
+      <text wx:if="{{totalCalories <= bmr}}">✅ 摄入低于基础代谢，继续保持！</text>
+      <text wx:else>⚠️ 已超过基础代谢 {{totalCalories - bmr}}千卡</text>
+    </view>
+  </view>
+
+  <!-- Detailed Recording -->
+  <view class="card">
+    <view class="detail-header" bindtap="toggleDetail">
+      <text class="section-title" style="margin-bottom:0">📸 拍照记录</text>
+      <text class="detail-toggle">{{showDetail ? '收起 ▲' : '展开 ▼'}}</text>
+    </view>
+  </view>
+
+  <view wx:if="{{showDetail}}" class="card">
+    <view wx:if="!photoTempPath" class="diet-photo-upload" bindtap="takePhoto">
+      <text class="diet-photo-icon">📷</text>
+      <text class="diet-photo-text">拍照或选择食物照片</text>
+    </view>
+    <view wx:if="{{photoTempPath}}" class="diet-photo-preview">
+      <image class="diet-photo-img" src="{{photoTempPath}}" mode="aspectFill"></image>
+      <view class="diet-photo-inputs">
+        <input class="diet-food-input" placeholder="食物名称（如：米饭）" value="{{foodName}}" bindinput="onFoodNameInput" />
+        <view class="diet-cal-input-row">
+          <input class="diet-cal-input" type="digit" placeholder="预估热量" value="{{foodCalories}}" bindinput="onFoodCaloriesInput" />
+          <text class="diet-cal-unit">千卡</text>
+        </view>
+        <view class="diet-photo-actions">
+          <button class="diet-photo-retake" bindtap="takePhoto">重拍</button>
+          <button class="diet-photo-add" bindtap="addFoodItem">{{uploading ? '上传中...' : '添加食物'}}</button>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Food List -->
+  <view wx:if="{{items.length > 0}}" class="card">
+    <text class="section-title">🍽️ 食物记录 ({{items.length}})</text>
+    <view class="food-item" wx:for="{{items}}" wx:for-index="idx" wx:key="createTime">
+      <image class="food-img" src="{{item.imageUrl}}" mode="aspectFill"></image>
+      <view class="food-info">
+        <text class="food-name">{{item.foodName}}</text>
+        <text class="food-cal">{{item.calories}}千卡</text>
+      </view>
+      <text class="food-del" data-index="{{idx}}" bindtap="deleteFoodItem">✕</text>
     </view>
   </view>
 
