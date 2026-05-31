@@ -170,11 +170,11 @@
 .type-fat { background: #FFF0F0; color: #F5222D; }
 
 .bmi-bar-wrap { position: relative; margin-top: 14px; padding-top: 8px; }
-.bmi-bar-marker {
-  position: absolute; top: 0; font-size: 14px; color: #FF94B4; z-index: 2;
-  transform: translateX(-50%); line-height: 1;
-}
 .bmi-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; }
+.bmi-pct-track { position: absolute; top: 0; left: 0; height: 0; overflow: visible; z-index: 2; }
+.bmi-pct-dot {
+  position: absolute; right: -7px; top: -2px; font-size: 14px; color: #FF94B4; line-height: 1;
+}
 .bmi-bar-seg { height: 100%; }
 .bmi-bar-thin { background: #FFB5C2; }
 .bmi-bar-normal { background: #52C41A; }
