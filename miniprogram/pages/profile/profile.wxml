@@ -50,8 +50,7 @@
       </view>
       <view class="profile-field">
         <text class="profile-lbl">当前体重(kg)</text>
-        <text class="profile-val-auto">{{currentWeight || '暂无数据'}}</text>
-        <text wx:if="{{currentWeight}}" class="auto-tag">自动同步</text>
+        <input class="profile-inp" type="digit" placeholder="输入当前体重" value="{{currentWeight}}" bindinput="onCurrentWeightInput" />
       </view>
     </view>
 
@@ -67,7 +66,6 @@
           <view class="bmi-bar-seg bmi-bar-fat" style="width:33.3%"></view>
         </view>
         <view class="bmi-indicator" style="margin-left:{{bmiPct}}%"></view>
-        <text class="bmi-debug">BMI:{{bmi}} h:{{_debugH}} w:{{_debugW}} t:{{_debugT}}</text>
         <view class="bmi-bar-labels">
           <text class="bmi-bar-lbl" style="left:0%">偏瘦</text>
           <text class="bmi-bar-lbl" style="left:28.3%">标准</text>
