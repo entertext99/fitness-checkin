@@ -96,19 +96,14 @@ Page({
   calcBMI() {
     const h = parseFloat(this.data.height)
     const cw = parseFloat(this.data.currentWeight)
-    if (!h || !cw || h <= 0) {
-      this.setData({ bmi: '', bodyType: '', bmiPct: 0 })
-      return
-    }
-    const bmi = cw / ((h / 100) * (h / 100))
-    const bmiStr = bmi.toFixed(1)
-    let type
-    if (bmi < 18.5) type = '偏瘦'
-    else if (bmi <= 23.9) type = '标准'
-    else if (bmi <= 27.9) type = '超重'
-    else type = '肥胖'
-    const pct = Math.min(Math.max((bmi - 10) / 30 * 100, 0), 100)
-    this.setData({ bmi: bmiStr, bodyType: type, bmiPct: Math.round(pct) })
+    this.setData({
+      bmi: h && cw && h > 0 ? (cw / ((h / 100) * (h / 100))).toFixed(1) : '--',
+      bodyType: h && cw && h > 0 ? '计算中' : '--',
+      bmiPct: h && cw && h > 0 ? 50 : 0,
+      _debugH: h,
+      _debugW: cw,
+      _debugT: Date.now()
+    })
   },
 
   async loadStats() {
