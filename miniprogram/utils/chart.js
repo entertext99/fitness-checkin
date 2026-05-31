@@ -17,7 +17,7 @@ class LineChart {
     const color = options.color || '#FF8A9B'
     const showLabels = options.showLabels !== false
     const showGrid = options.showGrid !== false
-    const dataSets = options.multiLine ? data : [{ data, color, label: options.label || '' }]
+    const dataSets = options.multiLine ? (options.dataSets || []) : [{ data, color, label: options.label || '' }]
 
     if (!dataSets.length || !dataSets[0].data.length) {
       ctx.draw()

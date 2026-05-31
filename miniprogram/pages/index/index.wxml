@@ -15,8 +15,8 @@
       <text class="section-title">🏋️ 今日训练</text>
       <view class="workout-status {{isWorking ? 'active' : ''}}"><text class="status-dot"></text><text>{{statusText}}</text></view>
     </view>
-    <view wx:if="!isWorking && !isPaused" class="timer-display idle"><text class="timer-text">00:00:00</text><text class="timer-label">点击下方开始记录今天的训练</text></view>
-    <view wx:if="isWorking || isPaused" class="timer-display running"><text class="timer-text {{isPaused ? 'paused' : ''}}">{{timerDisplay}}</text><text class="timer-label">{{isPaused ? '⏸ 已暂停' : '🔥 正在努力燃烧卡路里'}}</text></view>
+    <view wx:if="{{!isWorking && !isPaused}}" class="timer-display idle"><text class="timer-text">00:00:00</text><text class="timer-label">点击下方开始记录今天的训练</text></view>
+    <view wx:if="{{isWorking || isPaused}}" class="timer-display running"><text class="timer-text {{isPaused ? 'paused' : ''}}">{{timerDisplay}}</text><text class="timer-label">{{isPaused ? '⏸ 已暂停' : '🔥 正在努力燃烧卡路里'}}</text></view>
     <view wx:if="todayRecords.length > 0" class="today-records">
       <view class="record-label">今日已完成训练</view>
       <view class="record-item" wx:for="{{todayRecords}}" wx:key="index">
@@ -24,7 +24,7 @@
         <text class="record-time">{{item.timeStr}}</text>
       </view>
     </view>
-    <view class="workout-types" wx:if="!isWorking && !isPaused">
+    <view class="workout-types" wx:if="{{!isWorking && !isPaused}}">
       <text class="type-label">训练类型</text>
       <view class="type-options">
         <view class="type-tag {{aerobicClass}}" data-type="有氧" bindtap="toggleType">🏃 有氧训练</view>

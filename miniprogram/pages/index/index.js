@@ -13,18 +13,19 @@ Page({
     todayRecords: [],
     stats: { continuousDays: 0, totalDays: 0, weekMinutes: 0 },
     monthStats: { totalSessions: 0, totalHours: 0, avgMinutes: 0 },
-    startTime: null,
-    pauseStartTime: null,
-    pausedTotalMs: 0,
-    timerInterval: null,
     _profileChecked: false
   },
+
+  _startTime: null,
+  _pauseStartTime: null,
+  _pausedTotalMs: 0,
+  _timerInterval: null,
 
   onLoad() { this.setData({ _profileChecked: false }); this.initUser() },
 
   onShow() { this.loadTodayRecords(); this.loadStats() },
 
-  onUnload() { if (this.data.timerInterval) clearInterval(this.data.timerInterval) },
+  onUnload() { if (this._timerInterval) clearInterval(this._timerInterval) },
 
   async initUser() {
     await cloudUtil.getOpenid()
@@ -93,34 +94,38 @@ Page({
 
   startWorkout() {
     if (!this.data.selectedTypes.length) { wx.showToast({ title: '请选择训练类型', icon: 'none' }); return }
-    const startTime = new Date()
-    this.setData({ isWorking: true, isPaused: false, statusText: '训练中', startTime, pausedTotalMs: 0, timerDisplay: '00:00:00' })
-    this.data.timerInterval = setInterval(() => {
-      const elapsed = Math.max(0, new Date() - this.data.startTime - this.data.pausedTotalMs)
+    this._startTime = new Date()
+    this._pausedTotalMs = 0
+    this._pauseStartTime = null
+    this.setData({ isWorking: true, isPaused: false, statusText: '训练中', timerDisplay: '00:00:00' })
+    this._timerInterval = setInterval(() => {
+      const elapsed = Math.max(0, new Date() - this._startTime - this._pausedTotalMs)
       const t = Math.floor(elapsed / 1000)
       this.setData({ timerDisplay: `${String(Math.floor(t / 3600)).padStart(2,'0')}:${String(Math.floor((t % 3600) / 60)).padStart(2,'0')}:${String(t % 60).padStart(2,'0')}` })
     }, 1000)
   },
 
-  pauseWorkout() { clearInterval(this.data.timerInterval); this.setData({ isWorking: false, isPaused: true, statusText: '已暂停', pauseStartTime: new Date() }) },
+  pauseWorkout() { clearInterval(this._timerInterval); this._pauseStartTime = new Date(); this.setData({ isWorking: false, isPaused: true, statusText: '已暂停' }) },
 
   resumeWorkout() {
-    this.setData({ isWorking: true, isPaused: false, statusText: '训练中', pausedTotalMs: this.data.pausedTotalMs + (new Date() - this.data.pauseStartTime), pauseStartTime: null })
-    this.data.timerInterval = setInterval(() => {
-      const elapsed = Math.max(0, new Date() - this.data.startTime - this.data.pausedTotalMs)
+    this._pausedTotalMs += (new Date() - this._pauseStartTime)
+    this._pauseStartTime = null
+    this.setData({ isWorking: true, isPaused: false, statusText: '训练中' })
+    this._timerInterval = setInterval(() => {
+      const elapsed = Math.max(0, new Date() - this._startTime - this._pausedTotalMs)
       const t = Math.floor(elapsed / 1000)
       this.setData({ timerDisplay: `${String(Math.floor(t / 3600)).padStart(2,'0')}:${String(Math.floor((t % 3600) / 60)).padStart(2,'0')}:${String(t % 60).padStart(2,'0')}` })
     }, 1000)
   },
 
   stopTimer() {
-    clearInterval(this.data.timerInterval)
+    clearInterval(this._timerInterval)
     const endTime = new Date()
-    const totalSeconds = Math.floor(Math.max(0, endTime - this.data.startTime - this.data.pausedTotalMs) / 1000)
+    const totalSeconds = Math.floor(Math.max(0, endTime - this._startTime - this._pausedTotalMs) / 1000)
     const hours = Math.floor(totalSeconds / 3600); const minutes = Math.floor((totalSeconds % 3600) / 60)
     wx.showModal({
       title: '完成训练', content: `训练时长：${util.formatDuration(hours, minutes)}`, confirmText: '保存记录', cancelText: '放弃',
-      success: async (res) => { if (res.confirm) await this.saveRecord(this.data.startTime, endTime, { hours, minutes, totalMinutes: Math.floor(totalSeconds / 60) }); this.resetTimer() }
+      success: async (res) => { if (res.confirm) await this.saveRecord(this._startTime, endTime, { hours, minutes, totalMinutes: Math.floor(totalSeconds / 60) }); this.resetTimer() }
     })
   },
 
@@ -132,7 +137,7 @@ Page({
     } catch (err) { console.error(err); wx.showToast({ title: '保存失败', icon: 'none' }) }
   },
 
-  resetTimer() { this.setData({ isWorking: false, isPaused: false, statusText: '未开始', timerDisplay: '00:00:00', startTime: null, pauseStartTime: null, pausedTotalMs: 0, selectedTypes: [], aerobicClass: 'type-unselected', anaerobicClass: 'type-unselected' }) },
+  resetTimer() { this._startTime = null; this._pauseStartTime = null; this._pausedTotalMs = 0; this.setData({ isWorking: false, isPaused: false, statusText: '未开始', timerDisplay: '00:00:00', selectedTypes: [], aerobicClass: 'type-unselected', anaerobicClass: 'type-unselected' }) },
 
   navigateTo(e) { wx.navigateTo({ url: e.currentTarget.dataset.url }) },
 
