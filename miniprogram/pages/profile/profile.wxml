@@ -60,7 +60,7 @@
       <view class="bmi-row"><text class="bmi-label">当前体型：</text><text class="bmi-type {{bodyType === '偏瘦' ? 'type-thin' : ''}} {{bodyType === '标准' ? 'type-normal' : ''}} {{bodyType === '超重' ? 'type-over' : ''}} {{bodyType === '肥胖' ? 'type-fat' : ''}}">{{bodyType}}</text></view>
 
       <view class="bmi-bar-wrap">
-        <view class="bmi-bar-marker" style="left:{{bmiPct}}%">▼</view>
+        <view class="bmi-bar-marker" style="{{bmiLeftStyle}}">▼</view>
         <view class="bmi-bar">
           <view class="bmi-bar-seg bmi-bar-thin" style="width:28.3%"></view>
           <view class="bmi-bar-seg bmi-bar-normal" style="width:21.7%"></view>

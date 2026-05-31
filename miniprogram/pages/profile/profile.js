@@ -11,7 +11,7 @@ Page({
     currentWeight: '',
     bmi: '',
     bodyType: '',
-    bmiPct: 0,
+    bmiLeftStyle: '',
     stats: { continuousDays: 0, totalCheckins: 0, totalHours: 0 },
     profileLoaded: false,
     editing: false
@@ -97,7 +97,7 @@ Page({
     const h = parseFloat(this.data.height)
     const cw = parseFloat(this.data.currentWeight)
     if (!h || !cw || h <= 0) {
-      this.setData({ bmi: '', bodyType: '' })
+      this.setData({ bmi: '', bodyType: '', bmiLeftStyle: '' })
       return
     }
     const bmi = cw / ((h / 100) * (h / 100))
@@ -107,8 +107,8 @@ Page({
     else if (bmi <= 23.9) type = '标准'
     else if (bmi <= 27.9) type = '超重'
     else type = '肥胖'
-    const bmiPct = Math.min(Math.max((bmi - 10) / 30 * 100, 0), 100)
-    this.setData({ bmi: bmiStr, bodyType: type, bmiPct })
+    const pct = Math.min(Math.max((bmi - 10) / 30 * 100, 0), 100)
+    this.setData({ bmi: bmiStr, bodyType: type, bmiLeftStyle: 'left:' + pct + '%' })
   },
 
   async loadStats() {
