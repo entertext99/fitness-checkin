@@ -22,7 +22,7 @@ Page({
 
   async initAndLoad() {
     await cloudUtil.getOpenid()
-    this.loadProfile()
+    await this.loadProfile()
     this.loadStats()
   },
 
@@ -73,7 +73,6 @@ Page({
       height: this.data.height ? parseInt(this.data.height) : '',
       initWeight: this.data.initWeight ? parseFloat(this.data.initWeight) : ''
     }
-    this.calcBMI()
     try {
       const db = cloudUtil.db
       const existing = await db.collection('user_profiles').where({ _openid: openid }).get()
@@ -84,6 +83,7 @@ Page({
       }
       this.setData({ editing: false })
       wx.showToast({ title: '已保存', icon: 'success' })
+      this.loadProfile()
     } catch (err) { console.error(err); wx.showToast({ title: '保存失败', icon: 'none' }) }
   },
 
@@ -108,7 +108,7 @@ Page({
     else if (bmi <= 27.9) type = '超重'
     else type = '肥胖'
     const pct = Math.min(Math.max((bmi - 10) / 30 * 100, 0), 100)
-    this.setData({ bmi: bmiStr, bodyType: type, bmiPct: pct })
+    this.setData({ bmi: bmiStr, bodyType: type, bmiPct: Math.round(pct) })
   },
 
   async loadStats() {
