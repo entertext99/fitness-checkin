@@ -169,10 +169,10 @@
 .type-over { background: #FFF8F0; color: #FFB84D; }
 .type-fat { background: #FFF0F0; color: #F5222D; }
 
-.bmi-bar-wrap { position: relative; margin-top: 14px; padding-top: 8px; }
-.bmi-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; }
+.bmi-bar-wrap { margin-top: 14px; padding-top: 8px; }
+.bmi-bar { display: flex; height: 10px; border-radius: 5px; overflow: visible; position: relative; }
 .bmi-indicator {
-  position: absolute; bottom: 22px; width: 2px; height: 16px; background: #FF94B4; border-radius: 1px;
+  position: absolute; left: 0; top: -3px; width: 2px; height: 16px; background: #FF94B4; border-radius: 1px;
   transform: translateX(-50%);
 }
 .bmi-debug { font-size: 10px; color: #FF94B4; display: block; text-align: center; }
