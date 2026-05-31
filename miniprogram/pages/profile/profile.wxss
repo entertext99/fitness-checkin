@@ -175,6 +175,7 @@
   width: 2px; height: 16px; background: #FF94B4; border-radius: 1px;
   margin-top: -13px; transform: translateX(-1px);
 }
+.bmi-debug { font-size: 10px; color: #FF94B4; display: block; text-align: center; }
 .bmi-bar-seg { height: 100%; }
 .bmi-bar-thin { background: #FFB5C2; }
 .bmi-bar-normal { background: #52C41A; }
